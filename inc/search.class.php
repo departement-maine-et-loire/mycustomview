@@ -1,36 +1,5 @@
 <?php
 
-/**
- * ---------------------------------------------------------------------
- * GLPI - Gestionnaire Libre de Parc Informatique
- * Copyright (C) 2015-2018 Teclib' and contributors.
- *
- * http://glpi-project.org
- *
- * based on GLPI - Gestionnaire Libre de Parc Informatique
- * Copyright (C) 2003-2014 by the INDEPNET Development Team.
- *
- * ---------------------------------------------------------------------
- *
- * LICENSE
- *
- * This file is part of GLPI.
- *
- * GLPI is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GLPI is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
- * ---------------------------------------------------------------------
- */
-
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
@@ -55,7 +24,6 @@ class PluginMycustomviewSearch extends Search
    {
       $data = self::prepareDatasForSearch($itemtype, $params);
       self::constructSQL($data);
-      // print_r($data);
       self::constructData($data);
       self::displayDataMcv($data);
    }
@@ -103,20 +71,6 @@ class PluginMycustomviewSearch extends Search
          $parameters .= "&amp;_in_modal=1";
       }
 
-      // // Global search header
-      // if ($data['display_type'] == self::GLOBAL_SEARCH) {
-      //    if ($data['item']) {
-      //       echo "<div class='center'><h2>".$data['item']->getTypeName();
-      //       // More items
-      //       if ($data['data']['totalcount'] > ($data['search']['start'] + self::GLOBAL_DISPLAY_COUNT)) {
-      //          echo " <a href='".$data['search']['target']."?$parameters'>".__('All')."</a>";
-      //       }
-      //       echo "</h2></div>\n";
-      //    } else {
-      //       return false;
-      //    }
-      // }
-
       // If the begin of the view is before the number of items
       if ($data['data']['count'] > 0) {
          // Display pager only for HTML
@@ -138,19 +92,6 @@ class PluginMycustomviewSearch extends Search
 
             $search_config_top = $search_config_bottom
                = "<div class='pager_controls'>";
-
-            //       // $map_link = '';
-            //       // if (null == $item || $item->maybeLocated()) {
-            //       //    $map_link = "<input type='checkbox' name='as_map' id='as_map' value='1'";
-            //       //    if ($data['search']['as_map'] == 1) {
-            //       //       $map_link .= " checked='checked'";
-            //       //    }
-            //       //    $map_link .= "/>";
-            //       //    $map_link .= "<label for='as_map'><span title='".__s('Show as map')."' class='pointer fa fa-globe-americas'
-            //       //       onClick=\"toogle('as_map','','','');
-            //       //                   document.forms['searchform".$data["itemtype"]."'].submit();\"></span></label>";
-            //       // }
-            //       // $search_config_top .= $map_link;
 
             if (Session::haveRightsOr('search_config', [
                DisplayPreference::PERSONAL,
@@ -186,12 +127,6 @@ class PluginMycustomviewSearch extends Search
                );
             }
          }
-
-
-         //    if ($item !== null && $item->maybeDeleted()) {
-         //       // $delete_ctrl        = self::isDeletedSwitch($data['search']['is_deleted'], $data['itemtype']);
-         //       // $search_config_top .= $delete_ctrl;
-         //    }
 
          self::printPager(
             $data['search']['start'],
@@ -236,15 +171,6 @@ class PluginMycustomviewSearch extends Search
                $showmassiveactions
                && ($data['display_type'] == self::HTML_OUTPUT)
             ) {
-
-               // Html::openMassiveActionsForm($massformid);
-               // $massiveactionparams                  = $data['search']['massiveactionparams'];
-               // $massiveactionparams['num_displayed'] = $end_display-$begin_display;
-               // $massiveactionparams['fixed']         = false;
-               // $massiveactionparams['is_deleted']    = $data['search']['is_deleted'];
-               // $massiveactionparams['container']     = $massformid;
-
-               // Html::showMassiveActions($massiveactionparams);
             }
 
 
@@ -260,15 +186,18 @@ class PluginMycustomviewSearch extends Search
             // $removeTabComputer = [
             //    __s('name')
             // ];
-            // //Si c'est un ticket, on fait une refonte du tableau
+            //Si c'est un ticket, on fait une refonte du tableau
             // if ($data['data']['cols'][0]['itemtype'] == 'Ticket') {
 
             //    $data = self::reformTabMcv($data, $keepValuesTabTicket);
             // }
 
-            // //Si c'est un ordinateur, on fait une refonte du tableau plus poussée
+            //Si c'est un ordinateur, on fait une refonte du tableau plus poussée
+
             // if ($data['data']['cols'][0]['itemtype'] == 'Computer') {
-            //    // Pour enlever le système d'opération
+
+            // Pour enlever le système d'opération
+
             //    foreach ($data['data']['cols'] as $key => $newTab) {
             //       if (isset($newTab['groupname']['name'])) {
             //          if (($newTab['groupname']['name'] == 'Système d\'exploitation') and ($newTab['name'] == 'Nom')) {
@@ -281,24 +210,12 @@ class PluginMycustomviewSearch extends Search
 
             // ----------------------------------------------------------
             // ----------------------------------------------------------
-            $nbTabFields = 0;
 
-            foreach ($data['data']['cols'] as $key => $newTab) {
-               //                if ($newTab['name'] == 'Description') {
-               $nbTabFields++;
-               // print_r($data['data']['cols'][$key]);
-               // }
-            }
-          
+
 
             // Compute number of columns to display
             // Add toview elements
             $nbcols          = count($data['data']['cols']);
-
-            // if (($data['display_type'] == self::HTML_OUTPUT)
-            //    && $showmassiveactions) { // HTML display - massive modif
-            //    $nbcols++;
-            // }
 
             // Display List Header
 
@@ -319,23 +236,6 @@ class PluginMycustomviewSearch extends Search
 
             $header_num = 1;
 
-
-            // CHECKBOX DANS LE HEADER 
-
-            // if (($data['display_type'] == self::HTML_OUTPUT)
-            //       && $showmassiveactions) { // HTML display - massive modif
-            //    $headers_line_top
-            //       .= self::showHeaderItem($data['display_type'],
-            //                               Html::getCheckAllAsCheckbox($massformid),
-            //                               $header_num, "", 0, $data['search']['order']);
-            //    if ($data['display_type'] == self::HTML_OUTPUT) {
-            //       $headers_line_bottom
-            //          .= self::showHeaderItem($data['display_type'],
-            //                                  Html::getCheckAllAsCheckbox($massformid),
-            //                                  $header_num, "", 0, $data['search']['order']);
-            //    }
-            // }
-
             // Display column Headers for toview items
             $metanames = [];
 
@@ -355,7 +255,6 @@ class PluginMycustomviewSearch extends Search
                }
 
                $name = $val["name"];
-               // var_dump($name);
 
                // prefix by group name (corresponding to optgroup in dropdown) if exists
                if (isset($val['groupname'])) {
@@ -404,7 +303,7 @@ class PluginMycustomviewSearch extends Search
 
             $headers_line_top    .= $headers_line;
             if ($data['display_type'] == self::HTML_OUTPUT) {
-               
+
                // DECOMMENTER POUR RE-AVOIR LE FOOTER
                // Ajout de balises tbody et tfoot pour régler le problème de sorting JS
                // $headers_line_bottom .= "</tbody><tfoot>";
@@ -455,36 +354,6 @@ class PluginMycustomviewSearch extends Search
 
                // Add item in item list
                Session::addToNavigateListItems($current_type, $row["id"]);
-
-
-               // CHECKBOX DE CHAQUE TR 
-
-
-               // if (($data['display_type'] == self::HTML_OUTPUT)
-               //       && $showmassiveactions) { // HTML display - massive modif
-               //    $tmpcheck = "";
-
-               //    if (($data['itemtype'] == 'Entity')
-               //          && !in_array($row["id"], $_SESSION["glpiactiveentities"])) {
-               //       $tmpcheck = "&nbsp;";
-
-               //    } else if ($data['itemtype'] == 'User'
-               //             && !Session::canViewAllEntities()
-               //             && !Session::haveAccessToOneOfEntities(Profile_User::getUserEntities($row["id"], false))) {
-               //       $tmpcheck = "&nbsp;";
-
-               //    } else if (($data['item'] instanceof CommonDBTM)
-               //                && $data['item']->maybeRecursive()
-               //                && !in_array($row["entities_id"], $_SESSION["glpiactiveentities"])) {
-               //       $tmpcheck = "&nbsp;";
-
-               //    } else {
-               //       $tmpcheck = Html::getMassiveActionCheckBox($massiveaction_type,
-               //                                                 $row[$massiveaction_field]);
-               //    }
-               //    echo self::showItem($data['display_type'], $tmpcheck, $item_num, $row_num,
-               //                         "width='10'");
-               // }
 
                // Print other toview items
                foreach ($data['data']['cols'] as $col) {
@@ -546,24 +415,6 @@ class PluginMycustomviewSearch extends Search
             }
             // Display footer
             echo self::showFooter($data['display_type'], $title, $data['data']['count']);
-
-            // Delete selected item
-            // if ($data['display_type'] == self::HTML_OUTPUT) {
-            //    if ($showmassiveactions) {
-            //       $massiveactionparams['ontop'] = false;
-            //       Html::showMassiveActions($massiveactionparams);
-            //       // End form for delete item
-            //       Html::closeForm();
-            //    } else {
-            //       echo "<br>";
-            //    }
-            // }
-            // if ($data['display_type'] == self::HTML_OUTPUT) { // In case of HTML display
-            //    Html::printPager($data['search']['start'], $data['data']['totalcount'],
-            //                   $data['search']['target'], $parameters, '', 0,
-            //                      $search_config_bottom);
-
-            // }
          }
       } else {
          if (!isset($_GET['_in_modal'])) {
@@ -574,21 +425,25 @@ class PluginMycustomviewSearch extends Search
                   $map_link .= " checked='checked'";
                }
                $map_link .= "/>";
-               // $map_link .= "<label for='as_map'><span title='" . __s('Show as map') . "' class='pointer fa fa-globe-americas'
-               // onClick=\"toogle('as_map','','','');
-               // document.forms['searchform" . $data["itemtype"] . "'].submit();\"></span></label>";
+
                echo $map_link;
             }
 
-            if ($item !== null && $item->maybeDeleted()) {
-               // echo self::isDeletedSwitch($data['search']['is_deleted'], $data['itemtype']);
-            }
             echo "</div>";
          }
          echo self::showError($data['display_type']);
       }
    }
 
+   /**
+    * Supprime les valeurs d'un tableau 
+    *
+    * @param $data          $data                                                                                                                                                                      ,nbjh   ;gvv   !:ù
+    * @param $keepValuesTab      Tableau de données à garder
+    * @param $forcedisplay  array of columns to display (default empty = empty use display pref and search criterias)
+    *
+    * @return array prepare to be used for a search (include criterias and others needed informations)
+    **/
    public static function reformTabMcv($data, $keepValuesTab, $removeTab = null)
    {
       foreach ($data['data']['cols'] as $key => $newTab) {
@@ -635,6 +490,10 @@ class PluginMycustomviewSearch extends Search
    {
       global $CFG_GLPI;
 
+      if(!isset($_SESSION['glpilist_limit_mcv'])) {
+        PluginMycustomviewSavedSearch::getListLimitForUser(Session::getLoginUserID());
+      }
+
       // Default values of parameters
       $p['criteria']            = [];
       $p['metacriteria']        = [];
@@ -649,7 +508,7 @@ class PluginMycustomviewSearch extends Search
          $p['target']       = Toolbox::getItemTypeSearchURL($itemtype);
       }
       $p['display_type']        = self::HTML_OUTPUT;
-      $p['list_limit']          = $_SESSION['glpilist_limit'];
+      $p['list_limit']          = $_SESSION['glpilist_limit_mcv'];
       $p['massiveactionparams'] = [];
 
       foreach ($params as $key => $val) {
@@ -878,7 +737,7 @@ class PluginMycustomviewSearch extends Search
       return $out;
    }
 
-   
+
    /**
     * Print pager for search option (first/previous/next/last)
     *
@@ -893,45 +752,129 @@ class PluginMycustomviewSearch extends Search
     *
     * @return nothing (print a pager)
     *
-   **/
-  static function printPager($start, $numrows, $target, $parameters, $item_type_output = 0,
-  $item_type_output_param = 0, $additional_info = '') {
-global $CFG_GLPI;
+    **/
+   static function printPager(
+      $start,
+      $numrows,
+      $target,
+      $parameters,
+      $item_type_output = 0,
+      $item_type_output_param = 0,
+      $additional_info = ''
+   ) {
+      global $CFG_GLPI;
 
-$list_limit = $_SESSION['glpilist_limit'];
+      $list_limit = $_SESSION['glpilist_limit'];
 
-// Human readable count starts here
+      // Human readable count starts here
 
-$current_start = $start+1;
+      $current_start = $start + 1;
 
-// And the human is viewing from start to end
-$current_end = $current_start+$list_limit-1;
-if ($current_end > $numrows) {
-$current_end = $numrows;
-}
+      // And the human is viewing from start to end
+      $current_end = $current_start + $list_limit - 1;
+      if ($current_end > $numrows) {
+         $current_end = $numrows;
+      }
 
-// Empty case
-if ($current_end == 0) {
-$current_start = 0;
-}
+      // Empty case
+      if ($current_end == 0) {
+         $current_start = 0;
+      }
 
-// Print it
-echo "<div><table class='tab_cadre_pager'>";
-echo "<tr>";
+      // Print it
+      echo "<div><table class='tab_cadre_pager'>";
+      echo "<tr>";
 
-if (!empty($additional_info)) {
-echo "<td class='tab_bg_2' width='15%'>";
-echo $additional_info;
-echo "</td>";
-}
+      if (!empty($additional_info)) {
+         echo "<td class='tab_bg_2' width='15%'>";
+         echo $additional_info;
+         echo "</td>";
+      }
 
-echo "<td width='20%' class='tab_bg_2 b' style='text-align:left'>";
-//TRANS: %1$d, %2$d, %3$d are page numbers
-printf(__('From %1$d to %2$d of %3$d'), $current_start, $current_end, $numrows);
-echo "</td>\n";
+      echo "<td width='20%' class='tab_bg_2 b' style='text-align:left'>";
+      // correction du nombre d'éléments
+      if($_SESSION['glpilist_limit_mcv'] < $current_end) {
+         $current_end = $_SESSION['glpilist_limit_mcv'];
+      }
+      //TRANS: %1$d, %2$d, %3$d are page numbers
+      printf(__('From %1$d to %2$d of %3$d'), $current_start, $current_end, $numrows);
+      echo "</td>\n";
 
-// End pager
-echo "</tr></table></div>";
-}
+      // End pager
+      echo "</tr></table></div>";
+   }
 
+
+   /**
+    * Print generic footer
+    *
+    * @param $type   display type (0=HTML, 1=Sylk,2=PDF,3=CSV)
+    * @param $rows   number of rows
+    * @param $cols   number of columns
+    * @param $fixed  used tab_cadre_fixe table for HTML export ? (default 0)
+    *
+    * @return string to display
+    **/
+   static function showHeader($type, $rows, $cols, $fixed = 0)
+   {
+
+      $out = "";
+      switch ($type) {
+         case self::PDF_OUTPUT_LANDSCAPE: //pdf
+         case self::PDF_OUTPUT_PORTRAIT:
+            global $PDF_TABLE;
+            $PDF_TABLE = "<table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" >";
+            break;
+
+         case self::SYLK_OUTPUT: // Sylk
+            global $SYLK_ARRAY, $SYLK_HEADER, $SYLK_SIZE;
+            $SYLK_ARRAY  = [];
+            $SYLK_HEADER = [];
+            $SYLK_SIZE   = [];
+            // entetes HTTP
+            header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+            header('Pragma: private'); /// IE BUG + SSL
+            header('Cache-control: private, must-revalidate'); /// IE BUG + SSL
+            header("Content-disposition: filename=glpi.slk");
+            header('Content-type: application/octetstream');
+            // entete du fichier
+            echo "ID;PGLPI_EXPORT\n"; // ID;Pappli
+            echo "\n";
+            // formats
+            echo "P;PGeneral\n";
+            echo "P;P#,##0.00\n";       // P;Pformat_1 (reels)
+            echo "P;P#,##0\n";          // P;Pformat_2 (entiers)
+            echo "P;P@\n";              // P;Pformat_3 (textes)
+            echo "\n";
+            // polices
+            echo "P;EArial;M200\n";
+            echo "P;EArial;M200\n";
+            echo "P;EArial;M200\n";
+            echo "P;FArial;M200;SB\n";
+            echo "\n";
+            // nb lignes * nb colonnes
+            echo "B;Y" . $rows;
+            echo ";X" . $cols . "\n"; // B;Yligmax;Xcolmax
+            echo "\n";
+            break;
+
+         case self::CSV_OUTPUT: // csv
+            header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+            header('Pragma: private'); /// IE BUG + SSL
+            header('Cache-control: private, must-revalidate'); /// IE BUG + SSL
+            header("Content-disposition: filename=glpi.csv");
+            header('Content-type: text/csv');
+            // zero width no break space (for excel)
+            echo "\xEF\xBB\xBF";
+            break;
+
+         default:
+            if ($fixed) {
+               $out = "<div class='center mcv_content_savedsearch'><table border='0' class='tab_cadre_fixehov'>\n";
+            } else {
+               $out = "<div class='center mcv_content_savedsearch'><table border='0' class='tab_cadrehov'>\n";
+            }
+      }
+      return $out;
+   }
 }

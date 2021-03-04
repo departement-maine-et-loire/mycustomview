@@ -2,7 +2,7 @@
 /*
  -------------------------------------------------------------------------
  MyCustomView plugin for GLPI
- Copyright (C) 2020 by the MyCustomView Development Team.
+ Copyright (C) 2020 by the Département de Maine-et-Loire .
 
  https://github.com/pluginsGLPI/mycustomview
  -------------------------------------------------------------------------
@@ -51,6 +51,8 @@ function plugin_mycustomview_install()
          `id` INT(11) NOT NULL AUTO_INCREMENT,
          `user_id` INT(11) NOT NULL,
          `default_page` TINYINT,
+         `list_limit` INT(11),
+         `settings_hidden` TINYINT,
           PRIMARY KEY  (`id`)
        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
@@ -64,6 +66,7 @@ function plugin_mycustomview_install()
          `savedsearch_id` INT(11) NOT NULL,
          `order` TINYINT,
          `screen_mode` TINYINT,
+         `height` INT(11),
           PRIMARY KEY  (`id`)
        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
@@ -86,9 +89,6 @@ function plugin_mycustomview_install()
             'max_filters' => 6
          ]
       );
-
-      // $query="INSERT INTO `glpi_plugin_mycustomview_config` (`id`,`max_filters`) VALUES ( 1, 0)";
-      // $DB->query($query) or die("error creating VALUES in glpi_plugin_mycustomview_config ". $DB->error());
    }
 
    if (!$DB->TableExists("glpi_plugin_mycustomview_profile_rights")) {
@@ -122,10 +122,6 @@ function plugin_mycustomview_install()
    return true;
 }
 
-
-
-
-
 /**
  * Plugin uninstall process
  *
@@ -155,7 +151,7 @@ function changePageOnHome()
          }
       }
 
-   // vérification de la page par défaut
+      // vérification de la page par défaut
       if (PluginMycustomviewSavedSearch::isDefaultPageOfUser()) {
          $jsPluginMcv = "
            // VOIR DANS MUCUSTOMVIEW.JS COMMENT EST GERE LE PROBLEME DE CLICK SUR 'VUE PERSONNELLE'

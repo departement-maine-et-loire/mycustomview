@@ -33,7 +33,6 @@ class PluginMycustomviewMyview extends PluginMycustomviewBlocs
             PluginMycustomviewProfileRights::changeProfile();
          }
          $view->showBlocs($max_filters);
-         // $view->show('Ticket');
       }
       return true;
    }

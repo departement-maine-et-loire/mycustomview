@@ -26,8 +26,8 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_MYCUSTOMVIEW_VERSION', '1.0.0');
-include_once(GLPI_ROOT."/plugins/mycustomview/inc/profilerights.class.php");
+define('PLUGIN_MYCUSTOMVIEW_VERSION', '1.1.2');
+include_once(GLPI_ROOT . "/plugins/mycustomview/inc/profilerights.class.php");
 
 /**
  * Init hooks of the plugin.
@@ -35,7 +35,8 @@ include_once(GLPI_ROOT."/plugins/mycustomview/inc/profilerights.class.php");
  *
  * @return void
  */
-function plugin_init_mycustomview() {
+function plugin_init_mycustomview()
+{
    global $PLUGIN_HOOKS;
 
    Plugin::registerClass('PluginMycustomviewProfile', ['addtabon' => 'Profile']);
@@ -70,7 +71,8 @@ function plugin_init_mycustomview() {
  *
  * @return array
  */
-function plugin_version_mycustomview() {
+function plugin_version_mycustomview()
+{
    return [
       'name'           => 'MyCustomView',
       'version'        => PLUGIN_MYCUSTOMVIEW_VERSION,
@@ -91,7 +93,8 @@ function plugin_version_mycustomview() {
  *
  * @return boolean
  */
-function plugin_mycustomview_check_prerequisites() {
+function plugin_mycustomview_check_prerequisites()
+{
 
    //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
    $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
@@ -109,7 +112,8 @@ function plugin_mycustomview_check_prerequisites() {
  *
  * @return boolean
  */
-function plugin_mycustomview_check_config($verbose = false) {
+function plugin_mycustomview_check_config($verbose = false)
+{
    if (true) { // Your configuration check
       return true;
    }

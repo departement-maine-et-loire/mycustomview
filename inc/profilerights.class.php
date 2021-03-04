@@ -161,9 +161,6 @@ class PluginMycustomviewProfileRights extends CommonDBTM
          if ($id == 4) {
             return false;
          }
-         var_dump('Read : ' . $read);
-         var_dump('update : ' . $update);
-         var_dump('right : ' . $right);
 
          $DB->updateOrInsert(
             'glpi_plugin_mycustomview_profile_rights',
@@ -178,5 +175,32 @@ class PluginMycustomviewProfileRights extends CommonDBTM
 
          return true;
       }
+   }
+
+   static function isAskerIdIdentic($id){
+      if($_SESSION['glpiID'] == $id) {
+         return true;
+      }
+      return false;
+   }
+
+   static function addErrorMessage($message) {
+      Session::addMessageAfterRedirect(
+         $message,
+         false,
+         ERROR
+     );
+     echo json_encode(['success' => false]);
+     Html::displayAjaxMessageAfterRedirect();
+   }
+
+   static function addSuccessMessage($message) {
+      Session::addMessageAfterRedirect(
+         $message,
+         false,
+         INFO
+     );
+     echo json_encode(['success' => true]);
+     Html::displayAjaxMessageAfterRedirect();
    }
 }

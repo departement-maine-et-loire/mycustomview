@@ -1,7 +1,7 @@
 $(document).ready(function () {
+  //Déclaration des variables
   var buttonEdit = $("#mcv_edit");
   var buttonSave = $("#mcv_save");
-  var dragDropDiv = document.getElementById("mcv_drag_drop");
   var buttonCancel = $("#mcv_cancel");
   var buttonHelp = $("#mcv_help");
   var buttonsDelete = $(".mcv_delete");
@@ -11,18 +11,7 @@ $(document).ready(function () {
   var fadeZone = $(".draggable");
   var transparentDiv = $(".mcv_transparent_view");
   var savedSearchTitle = $(".savedsearch_title");
-
-  if ($("input").hasClass("mcv_delete_default")) {
-    var defaults = 0;
-    var buttonDefault = $(".mcv_delete_default");
-  } else if ($("input").hasClass("mcv_add_default")) {
-    var defaults = 1;
-    var buttonDefault = $(".mcv_add_default");
-  }
-
-  var listMovableElements = document.getElementsByClassName(
-    "mcv_movable_items"
-  );
+  var mcvTab = $(".mcv_tab");
 
   // De base on ne peut pas drag and drop
   var instance = $(".mcv_tab_container").dad({
@@ -71,40 +60,11 @@ $(document).ready(function () {
     buttonEditTitle.removeClass("mcv_display_none");
     divEditMode.removeClass("mcv_display_none");
     $(".fa-wrench").addClass("mcv_display_none");
-  });
+    $(".mcv_title_savedsearch").addClass("absolute_edit_title");
+    $(".mcv_content_savedsearch").addClass("absolute_edit_content");
+    $('#mcv_hide').addClass('mcv_display_none');
+    mcvTab.addClass("resizable");
 
-  $("#mcv_cancel").on("click", function () {
-    if ($(this).data("message") == 1) {
-      $(".mcv_cancel_message").removeClass("mcv_display_none");
-      $(".fullscreen-dark-container").removeClass("mcv_display_none");
-    } else {
-      actionOnCancel();
-    }
-  });
-
-  $(".mcv_modal_close").on("click", function () {
-    $(this).closest(".mcv_modal").addClass("mcv_display_none");
-    var type = $(this).data("modaltype");
-    if ((type = "message")) {
-      $(".fullscreen-dark-container").addClass("mcv_display_none");
-    }
-    if ((type = "help")) {
-      $(".fullscreen-dark-container").addClass("mcv_display_none");
-    }
-  });
-
-  buttonHelp.on("click", function () {
-    $(".mcv_modal_help").removeClass("mcv_display_none");
-    $(".fullscreen-dark-container").removeClass("mcv_display_none");
-  });
-
-  $(".fullscreen-dark-container").on("click", function () {
-    $(".mcv_modal_help").addClass("mcv_display_none");
-    $(".fullscreen-dark-container").addClass("mcv_display_none");
-  });
-
-  $(".mcv_button_message_cancel").on("click", function () {
-    location.reload();
   });
 
   function actionOnCancel() {
@@ -122,10 +82,69 @@ $(document).ready(function () {
     buttonEditTitle.addClass("mcv_display_none");
     divEditMode.addClass("mcv_display_none");
     $(".fa-wrench").removeClass("mcv_display_none");
+    $(".mcv_title_savedsearch").removeClass("absolute_edit_title");
+    $(".mcv_content_savedsearch").removeClass("absolute_edit_content");
+    $('#mcv_hide').removeClass('mcv_display_none');
+    mcvTab.removeClass("resizable");
+    resetHeight();
   }
 
+  $("#mcv_cancel").on("click", function () {
+    if ($(this).data("message") == 1) {
+      $(".mcv_cancel_message").removeClass("mcv_display_none");
+      $(".fullscreen-dark-container").removeClass("mcv_display_none");
+    } else {
+      actionOnCancel();
+    }
+  });
+
+  function resetHeight() {
+    mcvTab.each(function () { 
+      var height = $(this).height();
+      var dataHeight = $(this).data('height');
+      if (height != dataHeight) {
+        $(this).css('height', dataHeight + 'px');
+      }
+    });
+  }
+
+  $(".mcv_modal_close").on("click", function () {
+    $(this).closest(".mcv_modal").addClass("mcv_display_none");
+    var type = $(this).data("modaltype");
+    if ((type = "message")) {
+      $(".fullscreen-dark-container").addClass("mcv_display_none");
+    }
+    if ((type = "help")) {
+      $(".fullscreen-dark-container").addClass("mcv_display_none");
+    }
+  });
+
+  // Ouverture de la pop-up d'aide, chargement des images et démarrage du slider
+  buttonHelp.on("click", function () {
+    $(".mcv_modal_help").removeClass("mcv_display_none");
+    $(".fullscreen-dark-container").removeClass("mcv_display_none");
+    // Réactivez les 3 lignes dessous pour faire demarrer le slider à chaque clic sur l'aide
+    // $(".flexslider").removeData("flexslider");
+    // $("ol.flex-control-nav").remove();
+    // $("ul.flex-direction-nav").remove();
+    $(".flexslider").flexslider({
+      start: function () {
+        $(".flexImages").show();
+      },
+    });
+  });
+
+  // Clic de la partie grisée lorsqu'une pop-up est ouverte
+  $(".fullscreen-dark-container").on("click", function () {
+    $(".mcv_modal_help").addClass("mcv_display_none");
+    $(".fullscreen-dark-container").addClass("mcv_display_none");
+  });
+
+  $(".mcv_button_message_cancel").on("click", function () {
+    location.reload();
+  });
+
   // JS QUI PERMET DE REGLER LE PROBLEME SUR LE CLIC "VUE PERSONNELLE"
-  var executeClick = true;
   var clickOnMyView = document.querySelector("[title='Vue personnelle']");
   var myCustomView = document.querySelector("[title='Ma vue personnalisée']");
   clickOnMyView.addEventListener("click", function () {
@@ -151,10 +170,9 @@ $(document).ready(function () {
     }
   });
 
+  //On ajoute un indice sur le bouton cancel pour savoir si on a modifié un tableau de la vue
   $(".mcv_tab_container").on("dadDropEnd", function (e, element) {
-    console.log(element);
     buttonCancel.attr("data-message", 1);
-    buttonSave.addClass("button_shaking");
   });
 
   buttonsDelete.on("click", function () {
@@ -174,23 +192,49 @@ $(document).ready(function () {
     });
   });
 
+  // Clic sur le redimensionnement d'une fenêtre
   $(".mcv_screenmode").on("click", function () {
     var parentDiv = $(this).parents(".mcv_tab");
+    buttonCancel.attr("data-message", 1);
 
     if (parentDiv.hasClass("w-49")) {
       parentDiv.addClass("w-100").removeClass("w-49");
       $("span", this).html("Fenêtre réduite");
       $("i", this).removeClass("fa-expand").addClass("fa-compress");
-      parentDiv.attr('data-screenmode', 1);
+      parentDiv.attr("data-screenmode", 1);
     } else if (parentDiv.hasClass("w-100")) {
       parentDiv.addClass("w-49").removeClass("w-100");
       $("span", this).html("Fenêtre large");
       $("i", this).removeClass("fa-compress").addClass("fa-expand");
-      parentDiv.attr('data-screenmode', 0);
+      parentDiv.attr("data-screenmode", 0);
     }
   });
 
   $(".order_DESC::before").addClass("mcv_display_none");
 
-  $(".flexslider").flexslider();
+  $(".mcv_nb_items option").each(function () {
+    var sessionNumberItems = $(".mcv_nb_items").data('session-items-number');
+    if ($(this).val() == sessionNumberItems) {
+      $(this).attr('selected', true);
+    }
+  });
+
+  $('#mcv_hide').on("click", function () {
+    $(".mcv_manage_tab").fadeOut(500, function () {
+      $(".mcv_settings").removeClass('mcv_display_none');
+    });
+    
+  });
+
+  $('#mcv_show').on("click", function () {
+    if ($(".mcv_manage_tab").hasClass("mcv_display_none")) {
+      console.log('test')
+      $(".mcv_manage_tab").removeClass("mcv_display_none");
+    }
+    $(".mcv_manage_tab").fadeIn(500);
+    $(".mcv_settings").addClass('mcv_display_none');
+  });
+
+
+
 });

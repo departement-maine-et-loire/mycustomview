@@ -37,10 +37,10 @@
 
 // Entry menu case
 define('GLPI_ROOT', '../..');
-include (GLPI_ROOT . "/inc/includes.php");
+include(GLPI_ROOT . "/inc/includes.php");
 
 Session::checkRight("config", UPDATE, READ);
-    
+
 
 // To be available when plugin in not activated
 Plugin::load('mycustomview');

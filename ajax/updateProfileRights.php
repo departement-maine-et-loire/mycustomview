@@ -7,43 +7,20 @@ Html::header_nocache();
 Session::checkLoginUser();
 
 if (!(PluginMycustomviewProfileRights::isSuperAdmin())) {
-    Session::addMessageAfterRedirect(
-        'Vous n\'avez pas les droits pour effectuer cette action',
-        false,
-        ERROR
-    );
-    echo json_encode(['success' => false]);
-    Html::displayAjaxMessageAfterRedirect();
+    PluginMycustomviewProfileRights::addErrorMessage('Vous n\'avez pas les droits pour effectuer cette action');
     return false;
 }
 
 if (isset($_POST['data'])) {
     if(PluginMycustomviewProfileRights::updateProfile($_POST['data'])){
+        PluginMycustomviewProfileRights::addSuccessMessage('Les droits du profil ont bien été modifiés.');
 
-    Session::addMessageAfterRedirect(
-        'Les droits du profil ont bien été modifiés.',
-        false,
-        INFO
-    );
-    echo json_encode(['success' => true]); 
 }
 else {
-    Session::addMessageAfterRedirect(
-        'Impossible de modifier le super-admin',
-        false,
-        ERROR
-    );
-    echo json_encode(['success' => false]);
-    Html::displayAjaxMessageAfterRedirect();
+    PluginMycustomviewProfileRights::addErrorMessage('Impossible de modifier le super-admin');
     return false;
 }
 } else {
-    Session::addMessageAfterRedirect(
-        'Une erreur est survenue lors de la modification',
-        false,
-        ERROR
-    );
-    echo json_encode(['success' => false]);
+    PluginMycustomviewProfileRights::addErrorMessage( 'Une erreur est survenue lors de la modification');
 }
 
-Html::displayAjaxMessageAfterRedirect();

@@ -104,7 +104,7 @@ class PluginMycustomviewProfile extends Profile
         echo "</div>\n";
         echo "</div>";
 
-        $js = "console.log('test')
+        $js = "
         $('#updateMcv').on('click', function(){
             data = [];
             var readValue = $('#readProfileMcv').is(':checked');
