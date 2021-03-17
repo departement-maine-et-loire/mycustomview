@@ -491,7 +491,11 @@ class PluginMycustomviewSearch extends Search
       global $CFG_GLPI;
 
       if(!isset($_SESSION['glpilist_limit_mcv'])) {
-        PluginMycustomviewSavedSearch::getListLimitForUser(Session::getLoginUserID());
+        $result = PluginMycustomviewSavedSearch::getLimitNumberUser(Session::getLoginUserID());
+        foreach($result as $data) {
+         $_SESSION['glpilist_limit_mcv'] = $data['list_limit'];
+         $p['list_limit'] = $data['list_limit'];
+        }
       }
 
       // Default values of parameters
@@ -508,7 +512,7 @@ class PluginMycustomviewSearch extends Search
          $p['target']       = Toolbox::getItemTypeSearchURL($itemtype);
       }
       $p['display_type']        = self::HTML_OUTPUT;
-      $p['list_limit']          = $_SESSION['glpilist_limit_mcv'];
+      $p['list_limit'] = isset($p['list_limit']) ? $p['list_limit'] : $_SESSION['glpilist_limit_mcv'];
       $p['massiveactionparams'] = [];
 
       foreach ($params as $key => $val) {

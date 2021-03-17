@@ -360,8 +360,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       );
    }
 
-   public static function getListLimitForUser($id)
-   {
+   public static function getLimitNumberUser($id) {
       global $DB;
       $table = 'glpi_plugin_mycustomview_user_settings';
 
@@ -375,31 +374,60 @@ class PluginMycustomviewSavedSearch extends SavedSearch
          ],
       ]);
 
-      foreach ($result as $liste) {
-         if ($liste['list_limit'] == NULL) {
-            $_SESSION['glpilist_limit_mcv'] = 10;
-         } else {
-            $_SESSION['glpilist_limit_mcv'] = $liste['list_limit'];
+      return $result;
+   }
+
+   public static function getListLimitForUser($id, $number = 10)
+   {
+      $result = self::getLimitNumberUser($id);
+
+      // Si il y a déjà des settings pour l'utilisateur
+      if(count($result)){
+         foreach ($result as $liste) {
+            self::changeItemsNumber(Session::getLoginUserID(), $number);
+            $_SESSION['glpilist_limit_mcv'] = $number;
+         }
+      }
+      else {
+         if(self::isUserInSettingsMcv()){
+            self::changeItemsNumber(Session::getLoginUserID(), $number);
+         }
+         else {
+            self::createItemsNumber(Session::getLoginUserID(), $number);
          }
       }
    }
 
-   public static function changeItemsNumber($id, $number)
+   public static function createItemsNumber($id, $number) 
    {
       global $DB;
       $table = 'glpi_plugin_mycustomview_user_settings';
-
-      $DB->update(
+      $DB->insert(
          $table,
          [
             'list_limit'      => $number,
-         ],
-         [
             'user_id' => $id
          ]
       );
 
       $_SESSION['glpilist_limit_mcv'] = $number;
+   }
+
+   public static function changeItemsNumber($id, $number)
+   {         
+      global $DB;
+      $table = 'glpi_plugin_mycustomview_user_settings';
+         
+         $DB->update(
+            $table,
+            [
+               'list_limit'      => $number,
+            ],
+            [
+               'user_id' => $id
+            ]
+         );
+         $_SESSION['glpilist_limit_mcv'] = $number;
    }
 
    /**
@@ -655,7 +683,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
                 type: 'GET',
                 data: 'id=' + id + '&number=' + number,
                 success:function(data) {
-                   window.location.reload();
+                  window.location.reload();
                 }
              });
           }

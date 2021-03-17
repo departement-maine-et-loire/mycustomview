@@ -16,6 +16,7 @@ if (isset($_GET['id']) && isset($_GET['number'])) {
         PluginMycustomviewProfileRights::addErrorMessage('Vous n\'avez pas les droits pour effectuer cette action');
         return false;
     }
-    PluginMycustomviewSavedSearch::changeItemsNumber($_GET['id'], $_GET['number']);
+
+    PluginMycustomviewSavedSearch::getListLimitForUser(Session::getLoginUserID(), $number = $_GET['number']);
     PluginMycustomviewProfileRights::addSuccessMessage('La nombre d&apos;éléments de vos vues a bien été modifié.');
 }

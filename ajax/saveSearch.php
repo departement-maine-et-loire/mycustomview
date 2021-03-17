@@ -20,6 +20,7 @@ if (isset($_GET)) {
     $isUnique = $savedsearch->checkUnicitySavedSearch($id);
     if ($isUnique) {
         // $savedsearch->addSavedSearch($id, $user, $order);
+        PluginMycustomviewSavedSearch::getListLimitForUser(Session::getLoginUserID());
         if ($savedsearch->addSavedSearch($id, $user, $order)) {
             Session::addMessageAfterRedirect(
                 __('Search has been saved'),
