@@ -23,7 +23,6 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
             $_SESSION['session_message_norepeat'] = false;
         }
 
-        echo Html::css("/plugins/mycustomview/css/theme.default.min.css");
         echo Html::css("/plugins/mycustomview/css/flexslider.css");
         echo Html::Scss("/plugins/mycustomview/css/mycustomview.scss");
         echo Html::script("/plugins/mycustomview/js/jquery.dad.js");
@@ -31,7 +30,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         echo Html::script("/plugins/mycustomview/js/jquery.tablesorter.widgets.min.js");
         echo Html::script("/plugins/mycustomview/js/jquery.flexslider.js");
         echo Html::script("/plugins/mycustomview/js/mycustomview.js");
-
+        echo Html::css("/plugins/mycustomview/css/theme.default.min.css");
 
         echo "<div class='fullscreen-dark-container mcv_display_none'></div>";
         echo "<div id = 'mcv_drag_drop' class='mcv_drag_drop'>";

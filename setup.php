@@ -62,6 +62,9 @@ function plugin_init_mycustomview()
    $PLUGIN_HOOKS['add_css']['mycustomview'] = [
       "/plugins/mycustomview/css/mycustomview.css",
    ];
+   $PLUGIN_HOOKS['add_css']['mycustomview'] = [
+      "/plugins/mycustomview/css/theme.default.min.css",
+   ];
 }
 
 
