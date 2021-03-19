@@ -52,7 +52,6 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         echo "<button class='mcv_button mcv_button_success mcv_text_light mcv_change_title'>Valider</button>";
         echo "</div>";
 
-
         // ------- MODAL ANNULATION MODIFICATION ----------- //
 
         echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_cancel_message mcv_display_none'>";
