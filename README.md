@@ -10,6 +10,7 @@ Fonctionnalités présentes actuellement :
 - Possibilité de modifier les champs du tableau
 - Trier les champs du tableau
 - Afficher la page "Ma vue personnalisée" par défaut à la connexion
+- Ajuster la taille d'une recherche sauvegardée en hauteur/largeur
 - Modifier le titre d'une recherche sauvegardée
 - Autoriser seulements certains profils à accéder à cette vue
 
@@ -27,6 +28,7 @@ Functionnalities currently available:
 - Manage table fields
 - Sort table datas by fields
 - Display MyCustomView's page by default on connexion
+- Custom saved search view size (height/width)
 - Edit saved search title
 - Enable/Disable plugin to some profiles
 
