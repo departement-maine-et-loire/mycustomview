@@ -38,7 +38,6 @@ include_once(GLPI_ROOT . "/plugins/mycustomview/inc/profilerights.class.php");
 function plugin_init_mycustomview()
 {
    global $PLUGIN_HOOKS;
-
    Plugin::registerClass('PluginMycustomviewProfile', ['addtabon' => 'Profile']);
    Plugin::registerClass('PluginMycustomviewMyview', ['addtabon' => 'Central']);
    Plugin::registerClass('PluginMycustomviewDisplayPreference', ['addtabon' => 'DisplayPreference']);
@@ -81,7 +80,7 @@ function plugin_version_mycustomview()
       'version'        => PLUGIN_MYCUSTOMVIEW_VERSION,
       'author'         => 'Maxime MERIOT',
       'license'        => '',
-      'homepage'       => '',
+      'homepage'       => 'https://github.com/departement-maine-et-loire/mycustomview',
       'requirements'   => [
          'glpi' => [
             'min' => '9.1',

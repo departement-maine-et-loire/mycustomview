@@ -146,8 +146,12 @@ $(document).ready(function () {
 
   // JS QUI PERMET DE REGLER LE PROBLEME SUR LE CLIC "VUE PERSONNELLE"
   var clickOnMyView = document.querySelector("[title='Vue personnelle']");
+  var clickOnMyView2 = document.querySelector("[title='Tableau de bord']");
   var myCustomView = document.querySelector("[title='Ma vue personnalisée']");
   clickOnMyView.addEventListener("click", function () {
+    myCustomView.setAttribute("data-change", 1);
+  });
+  clickOnMyView2.addEventListener("click", function () {
     myCustomView.setAttribute("data-change", 1);
   });
 
