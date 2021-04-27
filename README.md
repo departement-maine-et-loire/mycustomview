@@ -2,6 +2,12 @@
 
 /!\ DISCLAIMER : Actually, MyCustomView doesn't support any langage except french. We may add traductions (at least english) on the nexts updates. 
 
+______________________
+*********************
+DOCUMENTATION FRANÇAISE
+*********************
+______________________
+
 MyCustomView est un plugin gratuit visant à personnaliser la vue d'un technicien/chef d'équipe/helpdesk. Cette vue permet d'afficher plusieurs recherches sauvegardées sur une même page.
 
 Fonctionnalités présentes actuellement : 
@@ -12,7 +18,13 @@ Fonctionnalités présentes actuellement :
 - Afficher la page "Ma vue personnalisée" par défaut à la connexion
 - Ajuster la taille d'une recherche sauvegardée en hauteur/largeur
 - Modifier le titre d'une recherche sauvegardée
-- Autoriser seulements certains profils à accéder à cette vue
+- Autoriser seulement certains profils à accéder à cette vue
+
+## Contributing
+
+* Vous pouvez ouvrir un ticket pour chaque problème rencontré que l'on puisse en discuter
+* Vous pouvez *forker* ce projet
+* Chaque *pull request* sera étudiée par un développeur
 
 ______________________
 *********************
@@ -20,7 +32,7 @@ ENGLISH DOCUMENTATION
 *********************
 ______________________
 
-MyCustomView is a free plugin made to custom home page for an helpdesk/technician/leader. This view allows to display multiples saved searches on the same page. 
+MyCustomView is a free plugin made to custom home page for an helpdesk/technician/manager. This view allows to display multiples saved searches on the same page. 
 
 Functionnalities currently available:
 - Drag and drop system between saved searches in the view
@@ -35,7 +47,5 @@ Functionnalities currently available:
 ## Contributing
 
 * Open a ticket for each bug/feature so it can be discussed
-* Follow [development guidelines](http://glpi-developer-documentation.readthedocs.io/en/latest/plugins/index.html)
-* Refer to [GitFlow](http://git-flow.readthedocs.io/) process for branching
 * Work on a new branch on your own fork
 * Open a PR that will be reviewed by a developer
