@@ -3,7 +3,7 @@
    <key>mycustomview</key>
    <!-- stable, beta, development, alpha, ... -->
    <state>beta</state>
-   <logo>https://raw.githubusercontent.com/pluginsGLPI/mycustomview/master/{LNAME}.png</logo>
+   <logo>https://www.adresses-mairies.fr/medias/departements/logo-departement-49-maine-et-loire.png</logo>
    <description>
       <short>
          <!-- Add as many lang tag you want -->
@@ -41,16 +41,7 @@
       <lang>fr_FR</lang>
    </langs>
    <license>GPL V3+</license>
-   <!--tags>
-      <en>
-         <tag>One tag</tag>
-         <tag>Another tag</tag>
-      </en>
-      <fr>
-         <tag>Un tag</tag>
-         <tag>Un autre tag</tag>
-      </fr>
-   </tags-->
+
    <screenshots>
       <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/normal-mode.png</screenshot>
       <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/edit-mode.png</screenshot>
