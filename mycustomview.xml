@@ -2,7 +2,7 @@
    <name>MyCustomView</name>
    <key>mycustomview</key>
    <!-- stable, beta, development, alpha, ... -->
-   <state>stable</state>
+   <state>beta</state>
    <logo>https://raw.githubusercontent.com/pluginsGLPI/mycustomview/master/{LNAME}.png</logo>
    <description>
       <short>
@@ -12,23 +12,25 @@
       </short>
       <long>
          <!-- Add as many lang tag you want -->
-         <en>A long description for MyCustomView GLPI plugin.</en>
-         <fr>Un description longue pour le plugin GLPI MyCustomView</fr>
+         <en>/!\ ONLY FRENCH AVAILABLE /!\</en>
+         <fr>MyCustomView est un plugin destiné à pouvoir organiser sa vue Centrale de manière personnalisée.</fr>
       </long>
    </description>
-   <homepage>https://github.com/pluginsGLPI/mycustomview</homepage>
-   <download>https://github.com/pluginsGLPI/mycustomview/releases</download>
-   <issues>https://github.com/pluginsGLPI/mycustomview/issues</issues>
-   <readme>https://github.com/pluginsGLPI/mycustomview/blob/master/README.md</readme>
+   <homepage>https://github.com/departement-maine-et-loire/mycustomview</homepage>
+   <download>https://github.com/departement-maine-et-loire/mycustomview/releases/tag/1.1.3</download>
+   <issues>https://github.com/departement-maine-et-loire/mycustomview/issues</issues>
+   <readme>https://github.com/departement-maine-et-loire/mycustomview#readme</readme>
    <authors>
       <!-- Add as many author tag you want -->
+      <author>Département de Maine-et-Loire</author>
       <author>Maxime MERIOT</author>
    </authors>
    <versions>
       <!-- Add as many version tag you want -->
       <version>
-         <num>0.0.1</num>
+         <num>1.1.3</num>
          <!-- Add as many compatibility tag you want -->
+         <compatibility>9.5</compatibility>
          <compatibility>9.4</compatibility>
          <compatibility>9.3</compatibility>
          <compatibility>9.2</compatibility>
@@ -36,7 +38,6 @@
    </versions>
    <langs>
       <!-- Add as many lang tag you want -->
-      <lang>en_GB</lang>
       <lang>fr_FR</lang>
    </langs>
    <license>GPL V3+</license>
@@ -50,8 +51,8 @@
          <tag>Un autre tag</tag>
       </fr>
    </tags-->
-   <!--screenshots>
-      <screenshot>https://github.com/pluginsGLPI/fields/raw/master/screenshot.png</screenshot>
-      <screenshot>https://github.com/pluginsGLPI/fields/raw/master/screenshot2.png</screenshot>
-   </screenshots-->
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/normal-mode.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/edit-mode.png</screenshot>
+   </screenshots>
 </root>
