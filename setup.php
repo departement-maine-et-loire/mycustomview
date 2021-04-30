@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_MYCUSTOMVIEW_VERSION', '1.1.3');
+define('PLUGIN_MYCUSTOMVIEW_VERSION', '1.2.0');
 include_once(GLPI_ROOT . "/plugins/mycustomview/inc/profilerights.class.php");
 
 /**

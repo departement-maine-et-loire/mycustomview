@@ -17,11 +17,11 @@ if (isset($_GET)) {
     $user = $_GET['user'];
     $order = $_GET['order'];
     $savedsearch = new PluginMycustomviewSavedSearch();
-    $isUnique = $savedsearch->checkUnicitySavedSearch($id);
+    $isUnique = PluginMycustomviewSavedSearch::checkUnicitySavedSearch($id);
     if ($isUnique) {
-        // $savedsearch->addSavedSearch($id, $user, $order);
+        // PluginMycustomviewSavedSearch::addSavedSearch($id, $user, $order);
         PluginMycustomviewSavedSearch::getListLimitForUser(Session::getLoginUserID());
-        if ($savedsearch->addSavedSearch($id, $user, $order)) {
+        if (PluginMycustomviewSavedSearch::addSavedSearch($id, $user, $order)) {
             Session::addMessageAfterRedirect(
                 __('Search has been saved'),
                 false,

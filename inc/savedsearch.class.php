@@ -90,9 +90,13 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
    public static function countUserSavedSearchMcv()
    {
-
-      $result = self::getUserSavedSearchMcv();
-      return count($result);
+      global $DB;
+      $result = $DB->request([
+         'FROM'   => 'glpi_plugin_mycustomview_savedsearch_list',
+         'COUNT'  => 'cpt',
+         'WHERE'  => ['user_id' => Session::getLoginUserID()]
+      ])->next();
+      return $result['cpt'];
    }
 
    /**
@@ -100,19 +104,28 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     *
     * @return void
     */
-   public function addSavedSearch($id, $user, $order)
+   public static function addSavedSearch($id, $user, $order)
    {
       global $DB;
-      $DB->insert(
+      $insert_query = $DB->buildInsert(
          'glpi_plugin_mycustomview_savedsearch_list',
          [
-            'user_id'      => $user,
-            'savedsearch_id'  => $id,
-            'order'      => $order,
-            'screen_mode' => 0
+            'user_id'      =>new QueryParam(),
+            'savedsearch_id'  => new QueryParam(),
+            'order'      => new QueryParam(),
+            'screen_mode' => 0,
+            'height' => 650
          ]
       );
-      return true;
+      $stmt = $DB->prepare($insert_query);
+      $stmt->bind_param(
+         'iii',
+         $user,
+         $id,
+         $order
+      );
+      $stmt->execute();
+      return $stmt;
    }
 
    static function checkUnicitySavedSearch($id)
@@ -132,15 +145,25 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     *
     * @return void
     */
-   public static function deleteSavedSearch($id)
+   public static function deleteSavedSearch($delete_tabs)
    {
       global $DB;
-      $DB->delete(
+
+      $delete_query = $DB->buildDelete(
          'glpi_plugin_mycustomview_savedsearch_list',
          [
-            'id'      => $id
-         ]
+            'id'      => new QueryParam()
+         ],
       );
+      $stmt = $DB->prepare($delete_query);
+      foreach ($delete_tabs as $row) {
+
+         $stmt->bind_param(
+            'i',
+            $row
+         );
+         $stmt->execute();
+      }
    }
 
    /**
@@ -188,25 +211,27 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       }
    }
 
-   public static function moveSavedSearch($values)
+   public static function moveSavedSearch($order_tabs)
    {
       global $DB;
 
-      foreach ($values as $tab) {
-         foreach ($tab as $update) {
-
-            if (isset($update["order"]) && isset($update['id'])) {
-               $DB->update(
-                  'glpi_plugin_mycustomview_savedsearch_list',
-                  [
-                     'order'      => $update["order"],
-                  ],
-                  [
-                     'id' => $update['id']
-                  ]
-               );
-            }
-         }
+      $update_query = $DB->buildUpdate(
+         'glpi_plugin_mycustomview_savedsearch_list',
+         [
+            'order'      => new QueryParam(),
+         ],
+         [
+            'id' => new QueryParam()
+         ]
+      );
+      $stmt = $DB->prepare($update_query);
+      foreach ($order_tabs as $row) {
+         $stmt->bind_param(
+            'ii',
+            $row['order'],
+            $row['id']
+         );
+         $stmt->execute();
       }
    }
 
@@ -232,6 +257,16 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       }
    }
 
+   static public function getUserSettings(){
+      global $DB;
+
+      $table = 'glpi_plugin_mycustomview_user_settings';
+
+      $result = $DB->request(['FROM' => $table, 'WHERE'  => ['user_id' => Session::getLoginUserID()]])->next();
+
+      return $result;
+   }
+
    public static function isDefaultPageOfUser()
    {
 
@@ -248,7 +283,8 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       }
    }
 
-   public static function areSettingsHidden() {
+   public static function areSettingsHidden()
+   {
 
       $result = self::isUserInSettingsMcv();
       if (!($result)) {
@@ -360,7 +396,8 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       );
    }
 
-   public static function getLimitNumberUser($id) {
+   public static function getLimitNumberUser($id)
+   {
       global $DB;
       $table = 'glpi_plugin_mycustomview_user_settings';
 
@@ -382,23 +419,21 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       $result = self::getLimitNumberUser($id);
 
       // Si il y a déjà des settings pour l'utilisateur
-      if(count($result)){
+      if (count($result)) {
          foreach ($result as $liste) {
             self::changeItemsNumber(Session::getLoginUserID(), $number);
             $_SESSION['glpilist_limit_mcv'] = $number;
          }
-      }
-      else {
-         if(self::isUserInSettingsMcv()){
+      } else {
+         if (self::isUserInSettingsMcv()) {
             self::changeItemsNumber(Session::getLoginUserID(), $number);
-         }
-         else {
+         } else {
             self::createItemsNumber(Session::getLoginUserID(), $number);
          }
       }
    }
 
-   public static function createItemsNumber($id, $number) 
+   public static function createItemsNumber($id, $number)
    {
       global $DB;
       $table = 'glpi_plugin_mycustomview_user_settings';
@@ -414,20 +449,20 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    }
 
    public static function changeItemsNumber($id, $number)
-   {         
+   {
       global $DB;
       $table = 'glpi_plugin_mycustomview_user_settings';
-         
-         $DB->update(
-            $table,
-            [
-               'list_limit'      => $number,
-            ],
-            [
-               'user_id' => $id
-            ]
-         );
-         $_SESSION['glpilist_limit_mcv'] = $number;
+
+      $DB->update(
+         $table,
+         [
+            'list_limit'      => $number,
+         ],
+         [
+            'user_id' => $id
+         ]
+      );
+      $_SESSION['glpilist_limit_mcv'] = $number;
    }
 
    /**
@@ -527,7 +562,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
        $('#mcv_save').on('click', function(){
  
           var tabs = $('.mcv_tab:not(:hidden)');
-          var data = [];
+          var orderTab = [];
           deleteTab = [];
           screenmodeTab = [];
           heightTab = [];
@@ -558,18 +593,14 @@ class PluginMycustomviewSavedSearch extends SavedSearch
              }
  
              if(dif) {
-             data.push({id :id, order :newNumber});
+             orderTab.push({id :id, order :newNumber});
              }
           });
- 
-          if(deleteMode){
-             deleteTab.push(deleteTabId);
-          }
  
           $.ajax({
              url: '" . $CFG_GLPI['root_doc'] . "/plugins/mycustomview/ajax/deleteAndMoveSearch.php',
              type: 'POST',
-             data: {data:data, deleteTab:deleteTab, screenmodeTab:screenmodeTab, heightTab:heightTab},
+             data: {orderTab:orderTab, deleteTab:deleteTabId, screenmodeTab:screenmodeTab, heightTab:heightTab},
              success:function(data) {
                window.location.reload();
              }
@@ -709,7 +740,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     *
     * @return void
     */
-   public function maxSavedSearchReached()
+   public static function maxSavedSearchReached()
    {
 
       echo "<div class='center mcv_text_limit'>";
@@ -722,7 +753,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     *
     * @return $result (Objet de DB)
     */
-   public function displaySavedSearchMcv($data)
+   public static function displaySavedSearchMcv($data)
    {
       echo "<button class='mcv_delete mcv_display_none'><i class='fas fa-2x fa-trash'></i>Supprimer</button>";
       echo '<h1>Futur affichage dun tableau ! En construction</h1>';
@@ -752,7 +783,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       echo " <div class='flexslider'>";
       echo " <ul class='slides'>";
-      
+
       echo "<li>";
       echo "<div class='p-5'>";
       echo "<p class='subtitle_modal m-5'>Etape 1 (Prérequis) : Création d'une ou plusieurs Recherche(s) sauvegardée(s)</p><br>";
@@ -842,6 +873,38 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       echo "  </li>";
 
       echo " </ul>";
+      echo "</div>";
+      echo "</div>";
+   }
+
+   public static function displayChangeTitleModal()
+   {
+      echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_modal_edit_title mcv_display_none'>";
+      echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
+      echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
+      echo "<h2 class='text-center m-auto mcv_modal_header_text'>Modification du titre</h2>";
+      echo "</div>";
+      echo "<h3 class='mcv_modal_text_edit_title'>Saisissez le nouveau titre de cette recherche</h3>";
+      echo "<input type='hidden' name='id_savedsearch'></input>";
+      echo "<input type='text' class='savedsearch_title'></input>";
+
+      echo "<button class='mcv_button mcv_button_success mcv_text_light mcv_change_title'>Valider</button>";
+      echo "</div>";
+   }
+
+   public static function displayCancelModal()
+   {
+
+      echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_cancel_message mcv_display_none'>";
+      echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
+      echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
+      echo "<h2 class='text-center m-auto mcv_modal_header_text'>Attention</h2>";
+      echo "</div>";
+      echo "<p class='mcv_text_dark mcv_message_text text-center font-bigger'>Vous allez abandonner vos modifications (déplacements/suppressions de fenêtres).</br>Êtes-vous sûr de confirmer ?";
+      echo "</p>";
+      echo "<div class='mcv_modal_footer d-flex flex-end'>";
+      echo "<button class='mcv_button mcv_button_dark mcv_text_light mcv_button_dark mcv_button_popup mcv_button_message_cancel'>Confirmer</button>";
+      echo "</div>";
       echo "</div>";
       echo "</div>";
    }

@@ -13,12 +13,10 @@ if (!(PluginMycustomviewProfileRights::canUpdate())) {
 
 if (isset($_POST)) {
     if (isset($_POST['deleteTab'])) {
-        foreach ($_POST['deleteTab'] as $id) {
-            PluginMycustomviewSavedSearch::deleteSavedSearch($id);
-        }
+            PluginMycustomviewSavedSearch::deleteSavedSearch($_POST['deleteTab']);
     }
-    if (isset($_POST['data'])) {
-        PluginMycustomviewSavedSearch::moveSavedSearch($_POST);
+    if (isset($_POST['orderTab'])) {
+        PluginMycustomviewSavedSearch::moveSavedSearch($_POST['orderTab']);
         PluginMycustomviewSavedSearch::reorderSavedSearch();
     }
 
@@ -30,7 +28,6 @@ if (isset($_POST)) {
 
     if (isset($_POST['heightTab'])) {
         foreach ($_POST['heightTab'] as $data) {
-            print_r($_POST['heightTab']);
             PluginMycustomviewSavedSearch::changeHeight($data['id'], $data['height']);
         }
     }

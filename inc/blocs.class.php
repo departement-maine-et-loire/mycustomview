@@ -7,90 +7,66 @@ if (!defined('GLPI_ROOT')) {
 class PluginMycustomviewBlocs extends PluginMycustomviewSearch
 {
 
-    public function showBlocs($max_filters)
+    public static function showBlocs($max_filters)
     {
         // Limitation du nombre de caractère des colonnes (pour Description surtout) à 80 caractères
         global $CFG_GLPI;
         $CFG_GLPI['cut'] = 80;
-
+        // Hauteur basique d'une recherche sauvegardée
+        global $baseHeight;
+        $baseHeight = 650;
+        // Valeur de notre recherche sauvegardée, utile pour l'ID de notre DisplayPreference
         global $indexBloc;
         $indexBloc = 0;
-        $search = new PluginMycustomviewSearch();
-        $savedsearch = new PluginMycustomviewSavedSearch();
         $userName = PluginMycustomviewMyview::getUserNameMcv();
+        $user_settings = PluginMycustomviewSavedSearch::getUserSettings();
+        $settings_hidden = $user_settings['settings_hidden'];
+        $list_limit = $user_settings['list_limit'];
+        $_SESSION['glpilist_limit_mcv'] = $list_limit;
+        if ($user_settings['default_page'] == 1) {
+            $default_page = true;
+        } else {
+            $default_page = false;
+        }
 
-        if(isset($_SESSION['session_message_norepeat'])) {
+        if (isset($_SESSION['session_message_norepeat'])) {
             $_SESSION['session_message_norepeat'] = false;
         }
 
-        echo Html::css("/plugins/mycustomview/css/flexslider.css");
-        echo Html::Scss("/plugins/mycustomview/css/mycustomview.scss");
-        echo Html::script("/plugins/mycustomview/js/jquery.dad.js");
-        echo Html::script("/plugins/mycustomview/js/jquery.tablesorter.min.js");
-        echo Html::script("/plugins/mycustomview/js/jquery.tablesorter.widgets.min.js");
-        echo Html::script("/plugins/mycustomview/js/jquery.flexslider.js");
-        echo Html::script("/plugins/mycustomview/js/mycustomview.js");
-        echo Html::css("/plugins/mycustomview/css/theme.default.min.css");
+        //AJOUT DES CSS, SCSS, SCRIPTS
+        PluginMycustomviewMyview::addScriptAndStyleSheet();
 
         echo "<div class='fullscreen-dark-container mcv_display_none'></div>";
         echo "<div id = 'mcv_drag_drop' class='mcv_drag_drop'>";
 
         // ------- MODAL HELP  ----------- //
-
         PluginMycustomviewSavedSearch::displayHelpModal();
 
         // -------- MODAL CHANGEMENT DE TITRE DE RECHERCHE ----------- //
-        echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_modal_edit_title mcv_display_none'>";
-        echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
-        echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
-        echo "<h2 class='text-center m-auto mcv_modal_header_text'>Modification du titre</h2>";
-        echo "</div>";
-        echo "<h3 class='mcv_modal_text_edit_title'>Saisissez le nouveau titre de cette recherche</h3>";
-        echo "<input type='hidden' name='id_savedsearch'></input>";
-        echo "<input type='text' class='savedsearch_title'></input>";
-
-        echo "<button class='mcv_button mcv_button_success mcv_text_light mcv_change_title'>Valider</button>";
-        echo "</div>";
+        PluginMycustomviewSavedSearch::displayChangeTitleModal();
 
         // ------- MODAL ANNULATION MODIFICATION ----------- //
-
-        echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_cancel_message mcv_display_none'>";
-        echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
-        echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
-        echo "<h2 class='text-center m-auto mcv_modal_header_text'>Attention</h2>";
-        echo "</div>";
-        echo "<p class='mcv_text_dark mcv_message_text text-center font-bigger'>Vous allez abandonner vos modifications (déplacements/suppressions de fenêtres).</br>Êtes-vous sûr de confirmer ?";
-        echo "</p>";
-        echo "<div class='mcv_modal_footer d-flex flex-end'>";
-        echo "<button class='mcv_button mcv_button_dark mcv_text_light mcv_button_dark mcv_button_popup mcv_button_message_cancel'>Confirmer</button>";
-        echo "</div>";
-        echo "</div>";
-        echo "</div>";
+        PluginMycustomviewSavedSearch::displayCancelModal();
 
         // Barre de button modifier / annuler / enregistrer / defaut
-        $settings_hidden = PluginMycustomviewSavedSearch::areSettingsHidden();
-
         if ($settings_hidden) {
             echo "<div class='mcv_settings'>";
-        }
-        else {
+        } else {
             echo "<div class='mcv_settings mcv_display_none'>";
         }
-        
+
         echo "<button id='mcv_show' title='Afficher les réglages' class='mcv_button mcv_text_light mcv_button_basic mcv_show '><i style='margin-left: 5px' class='fas fa-cog'></i></button>";
         echo "</div>";
         if ($settings_hidden) {
             echo "<div class='mcv_manage_tab mcv_display_none'>";
-        }
-        else {
+        } else {
             echo "<div class='mcv_manage_tab'>";
         }
         echo "<input type='hidden' id='user-id' value='" . $_SESSION['glpiID'] . "'>";
         echo "<div class='d-flex flex-column flex-start'>";
         echo "<div class='d-flex self-flex-start m-r-auto align-start m-b-5'>";
-        $sessionItemsNumber = isset($_SESSION['glpilist_limit_mcv']) ? $_SESSION['glpilist_limit_mcv'] : 10;
         echo "<label for='mcv_nb_items'>Nombre d'élément par recherche : </label>";
-        echo "<select id='mcv_nb_items' class='mcv_nb_items' name='mcv_nb_items' data-session-items-number='" . $sessionItemsNumber . "'>";
+        echo "<select id='mcv_nb_items' class='mcv_nb_items' name='mcv_nb_items' data-session-items-number='" . $list_limit . "'>";
         echo "<option value='5'>5</option>";
         echo "<option value='10'>10</option>";
         echo "<option value='15'>15</option>";
@@ -100,7 +76,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         echo "</select>";
         echo "</div>";
         echo "<div class='d-flex self-flex-start m-r-auto align-end'>";
-        if (PluginMycustomviewSavedSearch::isDefaultPageOfUser()) {
+        if ($default_page) {
             echo "<input id ='isMcvDefault' name='isMcvDefault' type='checkbox' checked class='mcv_delete_default'>";
         } else {
             echo "<input id ='isMcvDefault' name='isMcvDefault' type='checkbox' class='mcv_add_default'>";
@@ -118,17 +94,22 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
 
         // DIV DRAG AND DROP 
         echo "<div class='mcv_tab_container'>";
-        $count = $savedsearch->countUserSavedSearchMcv();
+        $count = PluginMycustomviewSavedSearch::countUserSavedSearchMcv();
         $maxReached = false;
         $idList = [];
         if ($count == 0) {
-            echo "<h2 class='center w-100' >Vous n'avez actuellement aucun filtre sauvegardé dans cette vue.</h2>";
+            echo "<h1 class='center w-100' >Vous n'avez actuellement aucun filtre sauvegardé dans cette vue.</h1>";
+            echo "<h2 class='center w-100'>Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue</h2>";
         } else {
+            $liste = PluginMycustomviewSavedSearch::getUserSavedSearchMcv($max_filters);
             for ($i = 1; $i <= $count; $i++) {
-                if ($liste = $savedsearch->getUserSavedSearchMcv($max_filters)) {
+                if($i > $max_filters){
+                    break;
+                }
+                if ($liste) {
                     $screen_mode = isset($liste[$i - 1]['screen_mode']) ? $liste[$i - 1]['screen_mode'] : null;
                     $height = isset($liste[$i - 1]['height']) ? $liste[$i - 1]['height'] : null;
-                    $dataHeight = isset($liste[$i - 1]['height']) ? $liste[$i - 1]['height'] : 650;
+                    $dataHeight = isset($liste[$i - 1]['height']) ? $liste[$i - 1]['height'] : $baseHeight;
                     if (isset($screen_mode)) {
                         if ($screen_mode == 0) {
                             $screen_mode_class = 'w-49';
@@ -173,7 +154,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
                             }
 
 
-                            $list = $savedsearch->getSavedSearchById($data['savedsearch_id']);
+                            $list = PluginMycustomviewSavedSearch::getSavedSearchById($data['savedsearch_id']);
                             // Ajout des ID déjà présents dans une liste
                             array_push($idList, $data['savedsearch_id']);
 
@@ -183,19 +164,19 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
                                     echo "<h2>Recherche sauvegardée n°" . $array['id'] . "</h2>";
                                     echo "<i title='Modifier le nom de cette recherche' class='fas fa-pen mcv_edit_title m-l-5 mcv_display_none' data-id='" . $array['id'] . "'></i>";
                                 } else {
-                                    echo "<div class='m-10 mcv_title_savedsearch'><a href='/front/" . strtolower($array['itemtype']) . ".php?" . $array['query'] . "' class='mcv_font_large'>" . $array['name'] . "</a>";
+                                    echo "<div class='m-10 mcv_title_savedsearch'><a href='/" . $array['path'] . "?" . $array['query'] . "' class='mcv_font_large'>" . $array['name'] . "</a>";
                                     echo "<i title='Modifier le nom de cette recherche' class='fas fa-pen mcv_edit_title m-l-5 mcv_display_none' data-id='" . $array['id'] . "'></i>";
                                     echo "</div>";
                                 }
                                 parse_str($array['query'], $p);
-                                $search->showListMcv($array['itemtype'], $p);
+                                PluginMycustomviewSearch::showListMcv($array['itemtype'], $p);
                             }
                         }
                     }
                     // si on arrive a $i >= $max_filters sans avoir déclanché le tableau de sauvegarde, on ajoute le JS
                     if ($i >= $max_filters) {
                         $maxReached = true;
-                        $savedsearch->addSavedSearchScriptMcv();
+                        PluginMycustomviewSavedSearch::addSavedSearchScriptMcv();
                     }
                 } else {
                 }
@@ -206,14 +187,14 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         // ------
         // si on est au nombre max de recherche, le tableau d'ajout ne s'affiche pas -> on affiche une aide a la place
         if ($maxReached) {
-            $savedsearch->maxSavedSearchReached();
+            PluginMycustomviewSavedSearch::maxSavedSearchReached();
         } else {
             // si l'ordre n'est pas linéaire, on vient afficher UNE seule fois le tableau pour ajouter une savedsearch
             echo "<div class='center w-100 p-5'>";
             echo "<div>";
             echo "<div><button class='mcv_button mcv_text_light mcv_button_basic listToggle'><span>Afficher la liste</span><i class='fas fa-2x fa-chevron-down'></i></button></div>";
-            $result = $savedsearch->getSavedSearchListMcv();
-            $savedsearch->displaySavedSearchListMcv($result, $userName, $idList);
+            $result = PluginMycustomviewSavedSearch::getSavedSearchListMcv();
+            PluginMycustomviewSavedSearch::displaySavedSearchListMcv($result, $userName, $idList);
             $i = $max_filters;
             echo "</div>";
             echo "</div>";

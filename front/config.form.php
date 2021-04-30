@@ -12,8 +12,8 @@ if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
 
    $config = new PluginMycustomviewConfig();
 
-   if($max_filters = $config->getConfiguration()) {
-      $config->showForm($max_filters[0]);
+   if($max_filters = $config->getMaxFilters()) {
+      $config->showForm($max_filters);
    }
    else 
    {
