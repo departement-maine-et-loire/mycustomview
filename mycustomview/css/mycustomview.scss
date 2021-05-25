@@ -1,0 +1,518 @@
+$default-color: #3e0635;
+$white: 255, 255, 255;
+
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 4 version
+*/
+
+.w-auto {
+  width: auto !important;
+}
+.w-100 {
+  width: 100%;
+}
+.maxw-80 {
+  max-width: 80% !important;
+}
+.maxw-60 {
+  max-width: 60% !important;
+}
+.maxw-50 {
+  max-width: 50% !important;
+}
+.maxw-45 {
+  max-width: 45% !important;
+}
+.maxw-40 {
+  max-width: 40% !important;
+}
+.maxw-35 {
+  max-width: 35% !important;
+}
+.maxw-20 {
+  max-width: 20% !important;
+}
+.maxw-15 {
+  max-width: 15% !important;
+}
+.maxw-10 {
+  max-width: 10% !important;
+}
+.maxw-100 {
+  max-width: 100%;
+}
+.m-b-5 {
+  margin-bottom: 5px;
+}
+.w-49 {
+  width: 49%;
+}
+.fixed {
+  position: fixed;
+}
+.resizable {
+  resize: vertical;
+}
+.font-bigger {
+  font-size: 1.1em !important;
+}
+.mcv_modal {
+  position: absolute;
+  z-index: 100;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+}
+.bg-white {
+  background-color: rgb($white);
+}
+.mcv_modal_bg_dark {
+  background-color: rgb(24, 24, 24);
+}
+.mcv_modal_bg_light {
+  background-color: white;
+}
+.mcv_modal_bg_basic {
+  background-color: $default-color;
+}
+.mcv_modal_small {
+  width: 60%;
+  left: 20%;
+  right: 20%;
+  top: 5%;
+  height: 400px;
+}
+.mcv_modal_very_small {
+  width: 40%;
+  height: 200px;
+  left: 30%;
+  right: 30%;
+  top: 150px;
+}
+.mcv_modal_close {
+  position: absolute;
+  right: 1%;
+  top: 1%;
+  z-index: 110;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: none;
+}
+.fa-window-close {
+  color: white;
+}
+.fa-2x {
+  font-size: 1.6em;
+}
+
+.mcv_modal_large {
+  width: 80%;
+  left: 10%;
+  right: 10%;
+  top: -50px;
+  height: auto;
+  min-height: 300px;
+  // max-height: 100%;
+}
+.mcv_modal_header {
+  position: relative;
+  width: 100%;
+  height: 50px;
+}
+.mcv_modal_footer {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  bottom: 0%;
+}
+.mcv_button_popup {
+  max-height: 80%;
+  margin: 5px;
+}
+.mcv_modal_header_text {
+  padding-top: 10px;
+}
+.mcv_font_large {
+  font-size: 1.4em !important;
+}
+.p-none {
+  padding: 0;
+}
+.p-10 {
+  padding: 10px;
+}
+.p-5 {
+  padding: 5px;
+}
+.p-3 {
+  padding: 3px;
+}
+.p-b-3 {
+  padding-bottom: 3px;
+}
+.m-10 {
+  margin: 10px !important;
+}
+.m-5 {
+  margin: 5px;
+}
+.m-l-5 {
+  margin-left: 5px;
+}
+.m-r-5 {
+  margin-right: 5px;
+}
+.m-auto {
+  margin: auto;
+}
+.m-r-auto {
+  margin-right: auto;
+}
+
+.savedsearch_title {
+  width: 90%;
+  font-size: 1.2em !important;
+  padding: 0.4rem !important;
+}
+.slides {
+  text-align: left;
+}
+
+.flexImages {
+  display: none;
+}
+.d-flex {
+  display: flex;
+  flex: 1;
+}
+.flex-end {
+  justify-content: flex-end;
+}
+.align-end {
+  align-self: flex-end;
+}
+.align-start {
+  align-self: flex-start;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
+.self-flex-start {
+  justify-self: flex-start !important;
+}
+.text-center {
+  text-align: center;
+}
+.subtitle_modal {
+  text-align: center;
+  font-size: 1.3em;
+  text-decoration: underline;
+  font-weight: bold;
+}
+.mcv_edit {
+  &:hover {
+    cursor: pointer;
+  }
+}
+.mcv_text_light {
+  color: white;
+}
+.mcv_text_dark {
+  color: black;
+}
+.mcv_button {
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.9em !important;
+  border-radius: 3px;
+  margin-left: 5px;
+  border: none;
+  &:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+  i {
+    &:first-child {
+      margin-right: 5px;
+    }
+  }
+}
+.mcv_button_warning {
+  background-color: rgb(196, 3, 3);
+}
+.mcv_button_success {
+  background-color: rgb(35, 124, 0);
+}
+.mcv_button_help {
+  background-color: #5144ff;
+}
+.mcv_button_basic {
+  background-color: $default-color;
+}
+.mcv_button_dark {
+  background-color: #2e2e2e;
+}
+.mcv_display_none {
+  display: none !important;
+}
+.mcv_tab_container {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 400px;
+}
+.mcv_tab {
+  overflow-y: auto;
+  position: relative;
+  height: 650px;
+  border : 1px solid rgb(189, 189, 189);
+  margin: 0.5% auto;
+  background-color: rgba(255,255,255, 0.80);
+  display: flex;
+  flex-direction: column;
+}
+
+.mcv_tab_limit {
+  max-height: 100%;
+  display: none;
+}
+.mcv_text_limit {
+  width: 80%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
+.draggable {
+  width: 70%;
+  height: 50%;
+  top: calc((100% - 50%) / 2);
+  left: calc((100% - 70%) / 2);
+  background: rgba(0, 0, 0, 0.85);
+  cursor: -webkit-grab;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: center;
+  color: white;
+  z-index: 10;
+  position: -webkit-sticky;
+  position: sticky;
+  flex-shrink: 0;
+}
+.absolute_edit_title {
+  position: absolute;
+  top: 30px;
+  left: 1%;
+  right: 1%;
+}
+.absolute_edit_content {
+  position: absolute;
+  top: 80px;
+}
+.mcv_absolute {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+}
+.mcv_settings {
+  display:flex;
+  justify-content: flex-end;
+}
+.visibility_hidden {
+  visibility: hidden;
+}
+.mcv_manage_tab {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+  height: 40px;
+}
+.listToggle {
+  padding: 1rem;
+  margin-bottom: 10px;
+  font-size: 16px !important;
+}
+button {
+  span {
+    margin-right: 0.5rem;
+  }
+}
+.mcv_delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.5rem;
+  z-index: 20;
+}
+.mcv_content_savedsearch {
+  width: 100%;
+}
+.mcv_change_title {
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+.mcv_edit_title {
+  z-index: 99;
+  position: relative;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+.mcv_modal_edit_title {
+  position: fixed;
+}
+.mcv_modal_text_edit_title {
+  width: 70% !important;
+  position: relative;
+  right: 15%;
+  left: 15%;
+}
+.mcv_screenmode {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0.5rem;
+  z-index: 20;
+}
+.mcv_header_edit_mode {
+  width: 100%;
+  height: 30px;
+  position: relative;
+}
+.ui-widget-content.message_after_redirect {
+  font-size: 1em !important;
+}
+.message_after_redirect.info_msg {
+  div.ui-widget-header {
+    background: #0c9918;
+  }
+}
+.mcv_text_info {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  p {
+    margin-right: 5px;
+  }
+}
+.dad-placeholder {
+  border: 4px dashed #639bf6;
+}
+.tab_cadrehov {
+  position: relative;
+  max-width: 100% !important;
+  thead {
+    th {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+    }
+  }
+}
+.dad-noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: -webkit-grabbing !important;
+  cursor: -moz-grabbing !important;
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: -webkit-grabbing !important;
+    cursor: -moz-grabbing !important;
+  }
+}
+.dad-container {
+  position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  &::after {
+    content: "";
+    clear: both !important;
+    display: block;
+  }
+}
+.dads-children {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+.dads-children-clone {
+  z-index: 9999;
+  pointer-events: none;
+}
+.dads-children-placeholder {
+  overflow: hidden;
+  position: absolute !important;
+  box-sizing: border-box;
+  border: 4px dashed #666666;
+  margin: 5px;
+  text-align: center;
+  color: #666666;
+  font-weight: bold;
+}
+.tab_bg_2 {
+  form {
+    display: none;
+  }
+}
+.mcv_transparent_view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 9;
+}
+.order_DESC {
+  &::before {
+    display: none !important;
+  }
+}
+.tab_cadre_pager {
+  tr {
+    td {
+      width: 15% important!;
+    }
+  }
+}
+.dnd_hover {
+  &:hover {
+    background-color: #000;
+    opacity: 0.8;
+  }
+}
+.fullscreen-dark-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 99;
+}
+@media screen and (max-width: 1068px) {
+  .mcv_tab {
+    width: 98%;
+  }
+}
