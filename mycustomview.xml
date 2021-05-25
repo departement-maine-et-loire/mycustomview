@@ -1,49 +1,57 @@
 <root>
-   <name>MyCustomView</name>
-   <key>mycustomview</key>
-   <!-- stable, beta, development, alpha, ... -->
-   <state>beta</state>
-   <logo>https://www.adresses-mairies.fr/medias/departements/logo-departement-49-maine-et-loire.png</logo>
-   <description>
-      <short>
-         <!-- Add as many lang tag you want -->
-         <en>MyCustomView GLPI plugin.</en>
-         <fr>Plugin GLPI MyCustomView</fr>
-      </short>
-      <long>
-         <!-- Add as many lang tag you want -->
-         <en>/!\ ONLY FRENCH AVAILABLE /!\</en>
-         <fr>MyCustomView est un plugin destiné à pouvoir organiser sa vue Centrale de manière personnalisée.</fr>
-      </long>
-   </description>
-   <homepage>https://github.com/departement-maine-et-loire/mycustomview</homepage>
-   <download>https://github.com/departement-maine-et-loire/mycustomview/releases/tag/1.1.3</download>
-   <issues>https://github.com/departement-maine-et-loire/mycustomview/issues</issues>
-   <readme>https://github.com/departement-maine-et-loire/mycustomview#readme</readme>
-   <authors>
-      <!-- Add as many author tag you want -->
-      <author>Département de Maine-et-Loire</author>
-      <author>Maxime MERIOT</author>
-   </authors>
-   <versions>
-      <!-- Add as many version tag you want -->
-      <version>
-         <num>1.1.3</num>
-         <!-- Add as many compatibility tag you want -->
-         <compatibility>9.5</compatibility>
-         <compatibility>9.4</compatibility>
-         <compatibility>9.3</compatibility>
-         <compatibility>9.2</compatibility>
-      </version>
-   </versions>
-   <langs>
+  <name>MyCustomView</name>
+  <key>mycustomview</key>
+  <!-- stable, beta, development, alpha, ... -->
+  <state>beta</state>
+  <logo>https://www.adresses-mairies.fr/medias/departements/logo-departement-49-maine-et-loire.png</logo>
+  <description>
+    <short>
       <!-- Add as many lang tag you want -->
-      <lang>fr_FR</lang>
-   </langs>
-   <license>GPL V3+</license>
-
-   <screenshots>
-      <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/normal-mode.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/edit-mode.png</screenshot>
-   </screenshots>
+      <en>MyCustomView GLPI plugin.</en>
+      <fr>Plugin GLPI MyCustomView</fr>
+    </short>
+    <long>
+      <!-- Add as many lang tag you want -->
+      <en>/!\ ONLY FRENCH AVAILABLE /!\</en>
+      <fr>MyCustomView est un plugin destin&#xE9; &#xE0; pouvoir organiser sa vue Centrale de mani&#xE8;re personnalis&#xE9;e.</fr>
+    </long>
+  </description>
+  <homepage>https://github.com/departement-maine-et-loire/mycustomview</homepage>
+  <download>https://github.com/departement-maine-et-loire/mycustomview/releases/tag/1.1.3</download>
+  <issues>https://github.com/departement-maine-et-loire/mycustomview/issues</issues>
+  <readme>https://github.com/departement-maine-et-loire/mycustomview#readme</readme>
+  <authors>
+    <!-- Add as many author tag you want -->
+    <author>D&#xE9;partement de Maine-et-Loire</author>
+    <author>Maxime MERIOT</author>
+  </authors>
+  <versions>
+    <!-- Add as many version tag you want -->
+    <version>
+      <num>1.1.3</num>
+      <!-- Add as many compatibility tag you want -->
+      <compatibility>9.5</compatibility>
+      <compatibility>9.4</compatibility>
+      <compatibility>9.3</compatibility>
+      <compatibility>9.2</compatibility>
+    </version>
+  </versions>
+  <langs>
+    <!-- Add as many lang tag you want -->
+    <lang>fr_FR</lang>
+  </langs>
+  <license>GPL V3+</license>
+  <tags>
+    <fr>
+      <tag>interface</tag>
+      <tag>personnalisé</tag>
+      <tag>gestion</tag>
+      <tag>filtre</tag>
+      <tag>recherche</tag>
+    </fr>
+  </tags>
+  <screenshots>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/normal-mode.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/edit-mode.png</screenshot>
+  </screenshots>
 </root>
