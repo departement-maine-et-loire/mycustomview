@@ -153,7 +153,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
          'glpi_plugin_mycustomview_savedsearch_list',
          [
             'id'      => new QueryParam()
-         ],
+         ]
       );
       $stmt = $DB->prepare($delete_query);
       foreach ($delete_tabs as $row) {
