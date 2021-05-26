@@ -122,7 +122,6 @@ class PluginMycustomviewConfig extends CommonDBTM
          $canedit = Session::haveRight("profile", CREATE);
          $prof = new Profile();
          if ($id){
-            $this->getFromDB($id);
             $prof->getFromDB($id);
          }
         
