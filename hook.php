@@ -154,7 +154,7 @@ function changePageOnHome()
       // vérification de la page par défaut
       if (PluginMycustomviewSavedSearch::isDefaultPageOfUser()) {
          $jsPluginMcv = "
-           // VOIR DANS MUCUSTOMVIEW.JS COMMENT EST GERE LE PROBLEME DE CLICK SUR 'VUE PERSONNELLE'
+           // VOIR DANS MUCUSTOMVIEW.JS COMMENT EST GERE LE PROBLEME DE CLICK SUR 'VUE PERSONNELLE OU TABLEAU DE BORD'
            var change = false;
            var myCustomView = document.querySelector('[title=\'Ma vue personnalisée\']');
            var dataChange = myCustomView.getAttribute('data-change');
@@ -162,7 +162,6 @@ function changePageOnHome()
            if (dataChange != null) {
               var change = true;
            }
-           var myView = document.querySelector('[title=\'Vue personnelle\']');
            
            if(change == false) {
               myCustomView.click();

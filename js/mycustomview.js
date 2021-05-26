@@ -145,16 +145,23 @@ $(document).ready(function () {
     location.reload();
   });
 
-  // JS QUI PERMET DE REGLER LE PROBLEME SUR LE CLIC "VUE PERSONNELLE"
+  // JS QUI PERMET DE REGLER LE PROBLEME SUR LE CLIC "VUE PERSONNELLE" OU "TABLEAU DE BORD"
   var clickOnMyView = document.querySelector("[title='Vue personnelle']");
   var clickOnMyView2 = document.querySelector("[title='Tableau de bord']");
-  var myCustomView = document.querySelector("[title='Ma vue personnalisée']");
-  clickOnMyView.addEventListener("click", function () {
-    myCustomView.setAttribute("data-change", 1);
-  });
-  clickOnMyView2.addEventListener("click", function () {
-    myCustomView.setAttribute("data-change", 1);
-  });
+  var myCustomView= document.querySelector("[title='Ma vue personnalisée']");
+    
+    if (clickOnMyView != null) {
+      clickOnMyView.addEventListener("click", function () {
+        myCustomView.setAttribute("data-change", 1);
+      });
+    }
+    if (clickOnMyView2 != null) {
+      clickOnMyView2.addEventListener("click", function () {
+        myCustomView.setAttribute("data-change", 1);
+      });
+    }
+
+  
 
   // Faire disparaitre la modal
   $(".mcv_button_message").on("click", function () {
