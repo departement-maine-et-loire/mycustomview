@@ -280,6 +280,10 @@ $white: 255, 255, 255;
   flex-direction: column;
 }
 
+.tablesorter-header-inner {
+  text-align : center;
+}
+
 .mcv_tab_limit {
   max-height: 100%;
   display: none;

@@ -31,8 +31,13 @@ class PluginMycustomviewSavedSearch extends SavedSearch
                ]
             ]
          ],
-         'WHERE' => [
-            "$table.users_id"    => Session::getLoginUserID()
+         'OR' => [
+            [
+               "$table.users_id"    => Session::getLoginUserID() 
+            ], 
+            [
+               "$table.is_private" => 0
+            ]
          ],
          'LIMIT' => 50
       ]);
@@ -479,7 +484,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       echo "<tr class='tab_bg_2'>";
       echo "<th>Nom</th>";
       echo "<th>Type d'élément</th>";
-      echo "<th>Utilisateur</th>";
+      echo "<th>Utilisateur/Type de recherche</th>";
       echo "<th class='sorter-false'>Ajouter <i class='fa fa-plus' title='Sauvegarder cette recherche dans cette vue'></i></th>";
       echo "</thead>";
       echo "<tbody>";
@@ -492,7 +497,19 @@ class PluginMycustomviewSavedSearch extends SavedSearch
          echo "<tr class='center'>";
          echo "<td><a href='/front/" . strtolower($data['itemtype']) . ".php?" . $data['query'] . "'>" . $data['name'] . "</a></td>";
          echo "<td>" . $data['itemtype'] . "</td>";
-         echo "<td>" . $userName . "</td>";
+         echo "<td>";
+         if ($data['users_id'] == Session::getLoginUserID()) {
+            if($data['is_private'] == 0) {
+               echo "Votre recherche publique";
+            }
+            else {
+               echo $userName;
+            }
+         }
+         else {
+            echo "Recherche publique";
+         }
+         echo "</td>";
          if (isset($idList)) {
 
             foreach ($idList as $id) {
