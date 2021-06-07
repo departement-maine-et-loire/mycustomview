@@ -28,7 +28,7 @@
   <versions>
     <!-- Add as many version tag you want -->
     <version>
-      <num>1.1.3</num>
+      <num>1.2.1</num>
       <!-- Add as many compatibility tag you want -->
       <compatibility>9.5</compatibility>
       <compatibility>9.4</compatibility>
