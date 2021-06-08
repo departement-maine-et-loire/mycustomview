@@ -490,14 +490,12 @@ class PluginMycustomviewSearch extends Search
    {
       global $CFG_GLPI;
 
-      // On définit la liste à 10 au cas où la session ne fonctionne pas
-      $p['list_limit'] = 10;
-      if(!isset($_SESSION['glpilist_limit_mcv'])) {
-        $result = PluginMycustomviewSavedSearch::getLimitNumberUser(Session::getLoginUserID());
-        foreach($result as $data) {
-         $_SESSION['glpilist_limit_mcv'] = $data['list_limit'];
-         $p['list_limit'] = $data['list_limit'];
-        }
+      // On définit la liste à 10 au cas où la session est inconnue
+      if(isset($_SESSION['glpilist_limit_mcv'])) {
+         $p['list_limit'] = $_SESSION['glpilist_limit_mcv'];
+      }
+      else {
+         $p['list_limit'] = 10;
       }
 
       // Default values of parameters

@@ -435,6 +435,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
          } else {
             self::createItemsNumber(Session::getLoginUserID(), $number);
          }
+         $_SESSION['glpilist_limit_mcv'] = $number;
       }
    }
 
@@ -467,7 +468,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
             'user_id' => $id
          ]
       );
-      $_SESSION['glpilist_limit_mcv'] = $number;
    }
 
    /**
