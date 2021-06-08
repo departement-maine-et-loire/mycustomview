@@ -202,6 +202,7 @@ $(document).ready(function () {
   $(function () {
     $(".tab_cadrehov").tablesorter({
       theme: "default",
+      dateFormat: 'ddmmyyyy',
     });
   });
 
