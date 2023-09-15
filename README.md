@@ -1,7 +1,5 @@
 # MyCustomView GLPI plugin
 
-/!\ DISCLAIMER : Actually, MyCustomView doesn't support any langage except french. We may add traductions (at least english) on the nexts updates. 
-
 ______________________
 *********************
 DOCUMENTATION FRANÇAISE
@@ -15,7 +13,7 @@ Fonctionnalités présentes actuellement :
 - Gérer le nombre d'éléments dans les recherches
 - Possibilité de modifier les champs du tableau
 - Trier les champs du tableau
-- Afficher la page "Ma vue personnalisée" par défaut à la connexion
+- Afficher la page "My custom view" par défaut à la connexion
 - Ajuster la taille d'une recherche sauvegardée en hauteur/largeur
 - Modifier le titre d'une recherche sauvegardée
 - Autoriser seulement certains profils à accéder à cette vue

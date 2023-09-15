@@ -1,4 +1,31 @@
 <?php
+/*
+ -------------------------------------------------------------------------
+ MyCustomView plugin for GLPI
+ Copyright (C) 2023 by the MyCustomView Development Team.
+
+ https://github.com/pluginsGLPI/mycustomview
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of MyCustomView.
+
+ MyCustomView is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+
+ MyCustomView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
 if (!defined('GLPI_ROOT')) {
  die("Sorry. You can't access directly to this file");
 }
@@ -29,7 +56,7 @@ class PluginMycustomviewConfig extends CommonDBTM
             {
                foreach($result as $data){
                     if(isset($data['id'])) {
-                return [$data['max_filters'], $data['id']];
+                        return [$data['max_filters'], $data['id']];
                     }
                 }  
             }
@@ -108,11 +135,11 @@ class PluginMycustomviewConfig extends CommonDBTM
         // si max_filters est défini, on est en train de modif
         if($max_filters != "") {
             $modify = true;
-            $createUpdate = "Modifier";
+            $createUpdate = __("Enregistrer", "mycustomview");
         }
         else {
             $create = true;
-            $createUpdate = "Ajouter";
+            $createUpdate = __("Ajouter", "mycustomview");
         }
         
         if (!Session::haveRight("profile",READ)) {
@@ -128,8 +155,8 @@ class PluginMycustomviewConfig extends CommonDBTM
         echo "<div align='center'>"; 
         echo "<form action='./config.form.php' method='post'>\n";
         echo "<table class='tab_cadre_fixe' style='margin: 0; margin-top: 5px;'>\n";
-        echo " <tr><th colspan='2'>$createUpdate le nombre de filtres maximum pour la page \"Ma vue personnalisée\".</th></tr>\n";
-        echo "<td style='width: 30%'><label for ='max_filters'>Nombres de filtres : </label></td>";
+        echo " <tr><th colspan='2'>$createUpdate " .__("le nombre de filtres maximum pour la page \"Ma vue personnalisée\"", "mycustomview") . ".</th></tr>\n";
+        echo "<td style='width: 30%'><label for ='max_filters'>" .__("Nombres de filtres", "mycustomview") . " : </label></td>";
         echo "<td style='width: 70%'><input type ='number' min='1' max='30' id='max_filters' value= '$max_filters' name='max_filters' placeholder='Min : 1 / Max : 30' required</td>";
         echo "</table>\n";
         if(Session::haveRight("profile", CREATE)){
@@ -137,18 +164,11 @@ class PluginMycustomviewConfig extends CommonDBTM
         "value='$createUpdate'>";
         }
         else {
-           echo " <div class='warning' style='margin-top:10px; width:70%'><i class='fa fa-exclamation-triangle fa'></i>";
-           
-            echo "Vous n'avez pas les droits pour modifier les données de cette page.";
+            echo "<div class='warning' style='margin-top:10px; width:70%'><i class='fa fa-exclamation-triangle fa'></i>";
+            echo __("Vous n'avez pas les droits pour modifier les données de cette page.", "mycustomview");
             echo "</div>";
         }
-
-
         Html::closeForm();
         echo "</div>"; 
-        
     }
-
-    
-};
-?> 
+}

@@ -2,7 +2,7 @@
 /*
  -------------------------------------------------------------------------
  MyCustomView plugin for GLPI
- Copyright (C) 2020 by the Département de Maine-et-Loire .
+ Copyright (C) 2023 by the MyCustomView Development Team.
 
  https://github.com/pluginsGLPI/mycustomview
  -------------------------------------------------------------------------
@@ -13,7 +13,7 @@
 
  MyCustomView is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
+ the Free Software Foundation; either version 3 of the License, or
  (at your option) any later version.
 
  MyCustomView is distributed in the hope that it will be useful,
@@ -41,6 +41,7 @@ function plugin_mycustomview_install()
    include_once(GLPI_ROOT . "/plugins/mycustomview/inc/profile.class.php");
    include_once(GLPI_ROOT . "/plugins/mycustomview/inc/config.class.php");
 
+   PluginMycustomviewProfile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
 
    // première installation -> Création de la table dans la base
 
@@ -85,38 +86,9 @@ function plugin_mycustomview_install()
       $DB->insert(
          'glpi_plugin_mycustomview_config',
          [
-            //'id' => 1,
             'max_filters' => 6
          ]
       );
-   }
-
-   if (!$DB->TableExists("glpi_plugin_mycustomview_profile_rights")) {
-      $query = "CREATE TABLE `glpi_plugin_mycustomview_profile_rights` (
-        `id` INT(11) NOT NULL AUTO_INCREMENT,
-        `profile` INT(11) NOT NULL,
-        `right` CHAR(2) NOT NULL,
-         PRIMARY KEY  (`id`)
-      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-      $DB->query($query) or die("error creating glpi_plugin_mycustomview_profile_rights " . $DB->error());
-
-      //creation du premier accès nécessaire lors de l'installation du plugin
-      //($_SESSION['glpiactiveprofile']['id']) will return 4 if super-admin
-      PluginMycustomviewProfileRights::createAdminAccess($_SESSION['glpiactiveprofile']['id']);
-   }
-
-   if (!$DB->TableExists("glpi_plugin_mycustomview_displaypreferences")) {
-      $query = "CREATE TABLE `glpi_plugin_mycustomview_displaypreferences` (
-     `id` INT(11) NOT NULL AUTO_INCREMENT,
-     `itemtype` VARCHAR(100) NOT NULL,
-     `num` INT(11) NOT NULL,
-     `rank` INT(11) NOT NULL,
-     `users_id` INT(11) NOT NULL,
-      PRIMARY KEY  (`id`)
-   ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-      $DB->query($query) or die("error creating glpi_plugin_mycustomview_displaypreferences " . $DB->error());
    }
 
    return true;
@@ -131,11 +103,29 @@ function plugin_mycustomview_uninstall()
 {
    global $DB;
 
-   $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_displaypreferences", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config", "glpi_plugin_mycustomview_profile_rights");
+   $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config");
 
    foreach ($tables as $table) {
       $DB->query("DROP TABLE IF EXISTS `$table`;");
    }
+
+   global $DB;
+
+    $result = $DB->request([
+        'SELECT' => ['profiles_id'],
+        'FROM' => 'glpi_profilerights',
+        'WHERE' => ['name' => ['LIKE', 'plugin_mycustomview%']]
+    ]);
+
+    foreach ($result as $id_profil) {
+        $DB->delete(
+            'glpi_profilerights', [
+                'name' => ['LIKE', 'plugin_mycustomview%'],
+                'profiles_id' => $id_profil
+            ]
+        );
+    }
+
    return true;
 }
 
@@ -149,26 +139,6 @@ function changePageOnHome()
          if ($_SESSION['glpiactiveprofile']['id'] == 1) {
             return;
          }
-      }
-
-      // vérification de la page par défaut
-      if (PluginMycustomviewSavedSearch::isDefaultPageOfUser()) {
-         $jsPluginMcv = "
-           // VOIR DANS MUCUSTOMVIEW.JS COMMENT EST GERE LE PROBLEME DE CLICK SUR 'VUE PERSONNELLE OU TABLEAU DE BORD'
-           var change = false;
-           var myCustomView = document.querySelector('[title=\'Ma vue personnalisée\']');
-           var dataChange = myCustomView.getAttribute('data-change');
-           
-           if (dataChange != null) {
-              var change = true;
-           }
-           
-           if(change == false) {
-              myCustomView.click();
-              change = true;
-           }
-           ";
-         echo Html::scriptBlock($jsPluginMcv);
       }
    }
 }

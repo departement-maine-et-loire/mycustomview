@@ -1,0 +1,435 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Yannick Comba <y.comba@maine-et-loire.fr>, 2022
+# Yannick Comba, 2022,2023
+# Département de Maine et Loire
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - MyCustomView\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-24 09:03+0000\n"
+"PO-Revision-Date: 2023-09-14 15:18+0200\n"
+"Last-Translator: Yannick Comba, 2022,2023\n"
+"Language-Team: French (France) (Département de Maine et Loire)\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#: inc/bloc.class.php:58
+msgid "Afficher les réglages"
+msgstr "Afficher les réglages"
+
+#: inc/bloc.class.php:68
+msgid "Nombre d'élément par recherche"
+msgstr "Nombre d'élément par recherche"
+
+#: inc/bloc.class.php:84
+msgid "Page par défaut"
+msgstr "Page par défaut"
+
+#: inc/bloc.class.php:87
+msgid "Annuler"
+msgstr "Annuler"
+
+#: inc/bloc.class.php:88 inc/savedsearch.class.php:838
+msgid "Modifier"
+msgstr "Modifier"
+
+#: inc/bloc.class.php:89
+msgid "Aide"
+msgstr "Aide"
+
+#: inc/bloc.class.php:90
+msgid "Masquer les réglages"
+msgstr "Masquer les réglages"
+
+#: inc/bloc.class.php:91 inc/savedsearch.class.php:858
+msgid "Enregistrer"
+msgstr "Enregistrer"
+
+#: inc/bloc.class.php:101
+msgid "Vous n'avez actuellement aucun filtre sauvegardé dans cette vue"
+msgstr "Vous n'avez actuellement aucun filtre sauvegardé dans cette vue"
+
+#: inc/bloc.class.php:102
+msgid "Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue"
+msgstr "Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue"
+
+#: inc/bloc.class.php:130
+msgid "Maintenez-moi pour me déplacer"
+msgstr "Maintenez-moi pour me déplacer"
+
+#: inc/bloc.class.php:131
+msgid "Vous pouvez agrandir la vue en bas à droite de la fenêtre de recherche"
+msgstr "Vous pouvez agrandir la vue en bas à droite de la fenêtre de recherche"
+
+#: inc/bloc.class.php:145 inc/savedsearch.class.php:773
+#: inc/savedsearch.class.php:854
+msgid "Supprimer"
+msgstr "Supprimer"
+
+#: inc/bloc.class.php:149
+msgid "Fenêtre large"
+msgstr "Fenêtre large"
+
+#: inc/bloc.class.php:152
+msgid "Fenêtre réduite"
+msgstr "Fenêtre réduite"
+
+#: inc/bloc.class.php:164
+msgid "Recherche sauvegardée n°"
+msgstr "Recherche sauvegardée n°"
+
+#: inc/bloc.class.php:165 inc/bloc.class.php:168
+msgid "Modifier le nom de cette recherche"
+msgstr "Modifier le nom de cette recherche"
+
+#: inc/bloc.class.php:195 js/mycustomview.js:175
+msgid "Afficher la liste"
+msgstr "Afficher la liste"
+
+#: inc/config.class.php:131
+msgid "le nombre de filtres maximum pour la page \"Ma vue personnalisée\""
+msgstr "le nombre de filtres maximum pour la page \"Ma vue personnalisée\""
+
+#: inc/config.class.php:132
+msgid "Nombres de filtres"
+msgstr "Nombres de filtres"
+
+#: inc/config.class.php:141
+msgid "Vous n'avez pas les droits pour modifier les données de cette page."
+msgstr "Vous n'avez pas les droits pour modifier les données de cette page."
+
+#: inc/profile.class.php:68
+msgid "Modifier les droits"
+msgstr "Modifier les droits"
+
+#: inc/profile.class.php:70
+msgid "Lecture (affichage de la vue)"
+msgstr "Lecture (affichage de la vue)"
+
+#: inc/profile.class.php:84
+msgid "Modification (création et suppression)"
+msgstr "Modification (création et suppression)"
+
+#: inc/savedsearch.class.php:485 inc/savedsearch.class.php:782
+msgid "Nom"
+msgstr "Nom"
+
+#: inc/savedsearch.class.php:486 inc/savedsearch.class.php:783
+msgid "Type d'élément"
+msgstr "Type d'élément"
+
+#: inc/savedsearch.class.php:487
+msgid "Utilisateur/Type de recherche"
+msgstr "Utilisateur/Type de recherche"
+
+#: inc/savedsearch.class.php:488 inc/savedsearch.class.php:814
+#: inc/savedsearch.class.php:870
+msgid "Ajouter"
+msgstr "Ajouter"
+
+#: inc/savedsearch.class.php:488 inc/savedsearch.class.php:523
+#: inc/savedsearch.class.php:785
+msgid "Sauvegarder cette recherche dans cette vue"
+msgstr "Sauvegarder cette recherche dans cette vue"
+
+#: inc/savedsearch.class.php:503
+msgid "Votre recherche publique"
+msgstr "Votre recherche publique"
+
+#: inc/savedsearch.class.php:510
+msgid "Recherche publique"
+msgstr "Recherche publique"
+
+#: inc/savedsearch.class.php:521 inc/savedsearch.class.php:830
+msgid "Déjà ajoutée"
+msgstr "Déjà ajoutée"
+
+#: inc/savedsearch.class.php:774
+msgid "Futur affichage d'un tableau ! En construction"
+msgstr "Futur affichage d'un tableau ! En construction"
+
+#: inc/savedsearch.class.php:775
+msgid "Voici un tableau de la SavedSearch numéro"
+msgstr "Voici un tableau de la SavedSearch numéro"
+
+#: inc/savedsearch.class.php:777
+msgid "L'ordre de ce tableau est le"
+msgstr "L'ordre de ce tableau est le"
+
+#: inc/savedsearch.class.php:784
+msgid "Utilisateur"
+msgstr "Utilisateur"
+
+#: inc/savedsearch.class.php:794 inc/savedsearch.class.php:898
+#: inc/savedsearch.class.php:914
+msgid "Fermer"
+msgstr "Fermer"
+
+#: inc/savedsearch.class.php:796
+msgid "Comment ça marche"
+msgstr "Comment ça marche"
+
+#: inc/savedsearch.class.php:804
+msgid "Etape 1 (Prérequis) : Création d'une ou plusieurs Recherche(s) sauvegardée(s)"
+msgstr "Etape 1 (Prérequis) : Création d'une ou plusieurs Recherche(s) sauvegardée(s)"
+
+#: inc/savedsearch.class.php:805
+msgid "Votre onglet"
+msgstr "Votre onglet"
+
+#: inc/profile.class.php:39 inc/myview.class.php:45
+#: inc/savedsearch.class.php:805 inc/savedsearch.class.php:826
+msgid "Ma vue personnalisée"
+msgstr "Ma vue personnalisée"
+
+#: inc/savedsearch.class.php:805
+msgid "fait appel à la fonctionnalité de"
+msgstr "fait appel à la fonctionnalité de"
+
+#: inc/savedsearch.class.php:805
+msgid "Recherches sauvegardées"
+msgstr "Recherches sauvegardées"
+
+#: inc/savedsearch.class.php:805
+msgid "(équivalent à se créer des filtres personnalisés)"
+msgstr "(équivalent à se créer des filtres personnalisés)"
+
+#: inc/savedsearch.class.php:806
+msgid "Suivre la procédure ci-dessous pour créer une (ou plusieurs) recherches"
+msgstr "Suivre la procédure ci-dessous pour créer une (ou plusieurs) recherches"
+
+#: inc/savedsearch.class.php:807
+msgid "Dans le menu"
+msgstr "Dans le menu"
+
+#: inc/savedsearch.class.php:807
+msgid "Assistance / Tickets"
+msgstr "Assistance / Tickets"
+
+#: inc/savedsearch.class.php:807
+msgid "effectuez une nouvelle recherche en positionnant les filtres souhaités puis cliquez sur"
+msgstr "effectuez une nouvelle recherche en positionnant les filtres souhaités puis cliquez sur"
+
+#: inc/savedsearch.class.php:807
+msgid "Rechercher"
+msgstr "Rechercher"
+
+#: inc/savedsearch.class.php:807
+msgid ". Il vous reste à sauvegarder votre recherche en cliquant sur le symbole en étoile"
+msgstr ". Il vous reste à sauvegarder votre recherche en cliquant sur le symbole en étoile"
+
+#: inc/savedsearch.class.php:814
+msgid "Nommez votre recherche et cliquez sur"
+msgstr "Nommez votre recherche et cliquez sur"
+
+#: inc/savedsearch.class.php:818
+msgid "Vous avez la possibilité de faire des recherches sur d'autres objets GLPI comme les ordinateurs (Menu"
+msgstr "Vous avez la possibilité de faire des recherches sur d'autres objets GLPI comme les ordinateurs (Menu"
+
+#: inc/savedsearch.class.php:818
+msgid "Parc / Ordinateurs"
+msgstr "Parc / Ordinateurs"
+
+#: inc/savedsearch.class.php:825
+msgid "Etape 2 : Construire sa vue personnalisée"
+msgstr "Etape 2 : Construire sa vue personnalisée"
+
+#: inc/savedsearch.class.php:826
+msgid "Dans la page d'accueil, cliquez sur l'onglet"
+msgstr "Dans la page d'accueil, cliquez sur l'onglet"
+
+#: inc/savedsearch.class.php:826
+msgid "(Par défaut aucune recherche ne s'affiche)"
+msgstr "Par défaut aucune recherche ne s'affiche"
+
+#: inc/savedsearch.class.php:830
+msgid "En bas de page, cliquez sur le bouton"
+msgstr "En bas de page, cliquez sur le bouton"
+
+#: inc/savedsearch.class.php:830
+msgid "face à la recherche sauvegardée que vous souhaitez afficher."
+msgstr "face à la recherche sauvegardée que vous souhaitez afficher."
+
+#: inc/savedsearch.class.php:830
+msgid "Une fois sélectionnée, celle-ci s'affiche dans votre vue et est indiquée comme"
+msgstr "Une fois sélectionnée, celle-ci s'affiche dans votre vue et est indiquée comme"
+
+#: inc/savedsearch.class.php:838
+msgid "Une fois vos recherches ajoutées, vous avez la possibilité en cliquant sur le bouton"
+msgstr "Une fois vos recherches ajoutées, vous avez la possibilité en cliquant sur le bouton"
+
+#: inc/savedsearch.class.php:838
+msgid "de"
+msgstr "de"
+
+#: inc/savedsearch.class.php:839
+msgid "Réorganiser vos fenêtres de recherche via un cliquer-Glisser"
+msgstr "Réorganiser vos fenêtres de recherche via un cliquer-Glisser"
+
+#: inc/savedsearch.class.php:846
+msgid "D'étendre ou de réduire votre fenêtre de recherche en utilisant les boutons « Fenêtre Large » ou « Fenêtre Réduite »"
+msgstr "D'étendre ou de réduire votre fenêtre de recherche en utilisant les boutons « Fenêtre Large » ou « Fenêtre Réduite »"
+
+#: inc/savedsearch.class.php:850
+msgid "De renommer votre recherche en cliquant sur le symbole représentant un crayon"
+msgstr "De renommer votre recherche en cliquant sur le symbole représentant un crayon"
+
+#: inc/savedsearch.class.php:854
+msgid "De supprimer de votre vue une recherche en cliquant sur le bouton <b>« Supprimer »</b>"
+msgstr "De supprimer de votre vue une recherche en cliquant sur le bouton <b>« Supprimer »</b>"
+
+#: inc/savedsearch.class.php:858
+msgid "IMPORTANT"
+msgstr "IMPORTANT"
+
+#: inc/savedsearch.class.php:858
+msgid "Une fois vos modifications effectuées, enregistrez-les en cliquant sur le bouton <b>« Enregistrer »</b>"
+msgstr "Une fois vos modifications effectuées, enregistrez-les en cliquant sur le bouton <b>« Enregistrer »</b>"
+
+#: inc/savedsearch.class.php:865
+msgid "Etape 3 : Personnaliser les champs visibles dans votre vue"
+msgstr "Etape 3 : Personnaliser les champs visibles dans votre vue"
+
+#: inc/savedsearch.class.php:866
+msgid "Cliquez sur le symbole « Clef » pour sélectionner les champs souhaités"
+msgstr "Cliquez sur le symbole « Clef » pour sélectionner les champs souhaités"
+
+#: inc/savedsearch.class.php:870
+msgid "Sélectionnez « Vue Personnelle » puis le champ à afficher et cliquer sur le bouton <b>« Ajouter »</b>"
+msgstr "Sélectionnez « Vue Personnelle » puis le champ à afficher et cliquer sur le bouton <b>« Ajouter »</b>"
+
+#: inc/savedsearch.class.php:877
+msgid "Etape 4 : Les options supplémentaires"
+msgstr "Etape 4 : Les options supplémentaires"
+
+#: inc/savedsearch.class.php:878
+msgid "Cochez la case « Page par défaut » pour positionner l'onglet « Ma vue personnalisée » comme page par défaut."
+msgstr "Cochez la case « Page par défaut » pour positionner l'onglet « Ma vue personnalisée » comme page par défaut."
+
+#: inc/savedsearch.class.php:880
+msgid "Sélectionnez le nombre d'éléments que vous souhaitez afficher par recherche"
+msgstr "Sélectionnez le nombre d'éléments que vous souhaitez afficher par recherche"
+
+#: inc/savedsearch.class.php:884
+msgid "Vous pouvez agrandir votre vue en étirant la fenêtre bas à droite (accessible en mode « Modification »)"
+msgstr "Vous pouvez agrandir votre vue en étirant la fenêtre bas à droite (accessible en mode « Modification »)"
+
+#: inc/savedsearch.class.php:900
+msgid "Modification du titre"
+msgstr "Modification du titre"
+
+#: inc/savedsearch.class.php:902
+msgid "Saisissez le nouveau titre de cette recherche"
+msgstr "Saisissez le nouveau titre de cette recherche"
+
+#: inc/savedsearch.class.php:906
+msgid "Valider"
+msgstr "Valider"
+
+#: inc/savedsearch.class.php:916
+msgid "Attention"
+msgstr "Attention"
+
+#: inc/savedsearch.class.php:918
+msgid "Vous allez abandonner vos modifications (déplacements/suppressions de fenêtres)"
+msgstr "Vous allez abandonner vos modifications (déplacements/suppressions de fenêtres)"
+
+#: inc/savedsearch.class.php:918
+msgid "Êtes-vous sûr de confirmer"
+msgstr "Êtes-vous sûr de confirmer"
+
+#: inc/savedsearch.class.php:921
+msgid "Confirmer"
+msgstr "Confirmer"
+
+#: ajax/changeItemsNumberPerView.php:10 ajax/changeItemsNumberPerView.php:16
+#: ajax/changeSavedSearchTitle.php:10 ajax/changeScreenMode.php:11
+#: ajax/changeSettingsVisibility.php:11 ajax/defaultPage.php:10
+#: ajax/deleteAndMoveSearch.php:10 ajax/saveSearch.php:11
+#: ajax/updateProfileRights.php:10
+msgid "Vous n'avez pas les droits pour effectuer cette action"
+msgstr "Vous n'avez pas les droits pour effectuer cette action"
+
+#: ajax/changeItemsNumberPerView.php:21
+msgid "Le nombre d'éléments de vos vues a bien été modifié."
+msgstr "Le nombre d'éléments de vos vues a bien été modifié."
+
+#: ajax/changeSavedSearchTitle.php:21
+msgid "Le titre de votre recherche sauvegardée"
+msgstr "Le titre de votre recherche sauvegardée"
+
+#: ajax/changeSavedSearchTitle.php:21
+msgid "a bien été modifié"
+msgstr "a bien été modifié"
+
+#: ajax/changeScreenMode.php:21
+msgid "La taille de votre fenêtre a bien été modifiée."
+msgstr "La taille de votre fenêtre a bien été modifiée."
+
+#: ajax/changeSettingsVisibility.php:19 ajax/changeSettingsVisibility.php:24
+msgid "Vos paramètres ont bien été modifiés."
+msgstr "Vos paramètres ont bien été modifiés."
+
+#: ajax/defaultPage.php:17
+msgid "Cette page est devenue votre page par défaut à la connexion."
+msgstr "Cette page est devenue votre page par défaut à la connexion."
+
+#: ajax/defaultPage.php:19
+msgid "Cette page n'est plus votre page par défaut à la connexion."
+msgstr "Cette page n'est plus votre page par défaut à la connexion."
+
+#: ajax/deleteAndMoveSearch.php:34
+msgid "L'affichage de vos fenêtres a bien été enregistré."
+msgstr "L'affichage de vos fenêtres a bien été enregistré."
+
+#: ajax/saveSearch.php:26
+msgid "La recherche a été sauvegardée"
+msgstr "La recherche a été sauvegardée"
+
+#: ajax/saveSearch.php:33 ajax/saveSearch.php:43
+msgid "La recherche n'a pas été sauvegardée"
+msgstr "La recherche n'a pas été sauvegardée"
+
+#: ajax/updateProfileRights.php:16
+msgid "Les droits du profil ont bien été modifiés."
+msgstr "Les droits du profil ont bien été modifiés."
+
+#: ajax/updateProfileRights.php:20
+msgid "Impossible de modifier le super-admin"
+msgstr "Impossible de modifier le super-admin"
+
+#: ajax/updateProfileRights.php:24
+msgid "Une erreur est survenue lors de la modification"
+msgstr "Une erreur est survenue lors de la modification"
+
+#: inc/bloc.class.php:261
+msgid "Masquer la liste"
+msgstr "Masquer la liste"
+
+#: inc/savedsearch.class.php:664 ajax/saveSearch.php:59
+msgid "Vous avez atteint le nombre de recherches sauvegardées maximum sur cette page"
+msgstr "Vous avez atteint le nombre de recherches sauvegardées maximum sur cette page"
+
+#: inc/savedsearch.class.php:665
+msgid "Veuillez supprimer au moins une vue si vous souhaitez en rajouter d'autres"
+msgstr "Veuillez supprimer au moins une vue si vous souhaitez en rajouter d'autres"
+
+#: inc/savedsearch.class.php:1169
+msgid "puis cliquez sur le symbole"
+msgstr "puis cliquez sur le symbole"
+
+#: inc/savedsearch.class.php:1173
+msgid "Puis cliquez sur le bouton"
+msgstr "Puis cliquez sur le bouton"
+
+#: inc/profile.php:95 inc/profile.php:110
+msgid "Item successfully updated"
+msgstr "Élément modifié"

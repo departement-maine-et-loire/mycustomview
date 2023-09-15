@@ -1,4 +1,31 @@
-$default-color: #3e0635;
+/*
+ -------------------------------------------------------------------------
+ MyCustomView plugin for GLPI
+ Copyright (C) 2023 by the MyCustomView Development Team.
+
+ https://github.com/pluginsGLPI/mycustomview
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of MyCustomView.
+
+ MyCustomView is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+
+ MyCustomView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+$default-color: #3a5693;
 $white: 255, 255, 255;
 
 /*
@@ -10,6 +37,7 @@ $white: 255, 255, 255;
 
 .w-auto {
   width: auto !important;
+  max-height: 200px;
 }
 .w-100 {
   width: 100%;
@@ -110,11 +138,12 @@ $white: 255, 255, 255;
 
 .mcv_modal_large {
   width: 80%;
+  top: -50px;
   left: 10%;
   right: 10%;
-  top: -50px;
   height: auto;
   min-height: 300px;
+  z-index: 10002;
   // max-height: 100%;
 }
 .mcv_modal_header {
@@ -145,7 +174,7 @@ $white: 255, 255, 255;
   padding: 10px;
 }
 .p-5 {
-  padding: 5px;
+  padding: 0 4rem !important;
 }
 .p-3 {
   padding: 3px;
@@ -157,7 +186,7 @@ $white: 255, 255, 255;
   margin: 10px !important;
 }
 .m-5 {
-  margin: 5px;
+  margin: .5rem !important;
 }
 .m-l-5 {
   margin-left: 5px;
@@ -307,6 +336,7 @@ $white: 255, 255, 255;
   flex-direction: column;
   align-items: space-between;
   justify-content: center;
+  text-align: center;
   color: white;
   z-index: 10;
   position: -webkit-sticky;
@@ -513,7 +543,7 @@ button {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 99;
+  z-index: 10001;
 }
 @media screen and (max-width: 1068px) {
   .mcv_tab {

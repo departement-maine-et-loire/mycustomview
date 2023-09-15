@@ -1,4 +1,30 @@
 <?php
+/*
+ -------------------------------------------------------------------------
+ MyCustomView plugin for GLPI
+ Copyright (C) 2023 by the MyCustomView Development Team.
+
+ https://github.com/pluginsGLPI/mycustomview
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of MyCustomView.
+
+ MyCustomView is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+
+ MyCustomView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
@@ -16,33 +42,201 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    {
       global $DB;
 
-      $table = 'glpi_savedsearches';
-      $utable = 'glpi_savedsearches_users';
+      $id_user = Session::getLoginUserID();
 
-      $result = $DB->request([
-         'SELECT' =>
-         "$table.*",
-         'FROM' => $table,
-         'LEFT JOIN' => [
-            $utable => [
-               'ON' => [
-                  $utable  => 'savedsearches_id',
-                  $table   => 'id'
-               ]
-            ]
-         ],
-         'OR' => [
-            [
-               "$table.users_id"    => Session::getLoginUserID() 
-            ], 
-            [
-               "$table.is_private" => 0
-            ]
-         ],
-         'LIMIT' => 50
-      ]);
+      $query = "SELECT GS.id, name, GS.itemtype, GS.users_id, is_private, query
+      FROM glpi_savedsearches GS
+      LEFT JOIN glpi_savedsearches_users GSU ON GS.id = GSU.savedsearches_id
+      WHERE GS.users_id = $id_user
+      OR GS.is_private = 0
+      LIMIT 50";
 
-      return $result;
+      $result = $DB->query($query);
+
+    // Test ok
+    // $result = $DB->request([
+    //     'SELECT' => ['GS.id', 'name', 'GS.itemtype', 'GS.users_id', 'is_private', 'query'],
+    //     'FROM' => 'glpi_savedsearches AS GS',
+    //     'LEFT JOIN' => ['glpi_savedsearches_users AS GSU' => ['FKEY' => ['GS' => 'id',
+    //                                                                        'GSU' => 'savedsearches_id']]],
+    //     'WHERE' => ['OR' => ['GS.users_id' => $id_user, 'GS.is_private' => 0]],
+    //     'LIMIT' => 50
+    // ]);
+
+      $array = array();
+
+      foreach ($result as $data){
+        array_push($array, $data);
+      }
+
+      return $array;
+   }
+
+    /**
+     * Permet de récupérer toutes les recherches contenues dans le plugin mycustomview
+     *
+     * 
+     * @return array 
+     **/
+   public static function debug_search()
+   {
+    global $DB;
+    $id_user = Session::getLoginUserID();
+
+    $query = "SELECT *
+    FROM glpi_plugin_mycustomview_savedsearch_list
+    WHERE user_id = $id_user
+    ORDER BY `order` ASC";
+
+    $result = $DB->query($query);
+
+    // Test ok
+    // $result = $DB->request([
+    //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
+    //     'WHERE' => ['user_id' => $id_user],
+    //     'ORDER' => ['order ASC']
+    // ]);
+
+    $array = array();
+
+    foreach ($result as $data){
+      array_push($array, $data);
+    }
+
+    return $array;
+   }
+
+    /**
+     * Permet de récupérer toutes les recherches de l'utilisateur
+     *
+     * 
+     * @return array 
+     **/
+   public static function getAllSearches()
+   {
+    global $DB;
+    $id_user = Session::getLoginUserID();
+
+    $query = "SELECT *
+    FROM glpi_savedsearches
+    WHERE users_id = $id_user";
+
+    $result = $DB->query($query);
+
+    // Test ok
+    // $result = $DB->request([
+    //     'FROM' => 'glpi_savedsearches',
+    //     'WHERE' => ['users_id' => $id_user],
+    // ]);
+
+    $array = array();
+
+    foreach ($result as $data) {
+        array_push($array, $data['id']);
+    }
+
+    return $array;
+   }
+
+    /**
+    * Affiche la liste des recherches sauvegardées de l'utilisateur
+    *
+    * @return array
+    */
+   public static function getAllUserSavedSearchMcv()
+   {
+    global $DB;
+    $id_user = Session::getLoginUserID();
+
+    $query = "SELECT *
+    FROM glpi_plugin_mycustomview_savedsearch_list
+    WHERE user_id = $id_user";
+
+    $result = $DB->query($query);
+
+    //   Test ok
+    //   $result = $DB->request([
+    //       'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
+    //       'WHERE' => ['user_id' => $id_user],
+    //   ]);
+
+    $array = array();
+
+    foreach ($result as $data) {
+        array_push($array, $data);
+    }
+
+    return $array;
+   }
+
+    /**
+     * Permet de corriger les recherches si besoin
+     *
+     * 
+     * @return void
+     **/
+   public static function delete_bugged_search()
+   {
+    global $DB;
+    $getAllUserSavedSearchMcv = self::getAllUserSavedSearchMcv();
+    $allSearches = self::getAllSearches();
+    $array = self::debug_search();
+
+    $ndArray = [];
+
+    foreach ($getAllUserSavedSearchMcv as $savedSearchId) {
+        array_push($ndArray, $savedSearchId['savedsearch_id']);
+    }
+
+    // Supprime les recherches toujours enregistrées dans le plugin si elles ne font plus parties de GLPI
+    foreach ($ndArray as $searches) {
+        if (!in_array($searches, $allSearches)) {
+            $DB->delete(
+                'glpi_plugin_mycustomview_savedsearch_list', [
+                   'savedsearch_id' => $searches
+                ]
+             );
+        }
+    }
+
+    $arraytemp = array();
+    $arraytempnok = array();
+
+    // Vérifie que l'ordre est toujours linéaire
+    foreach ($array as $test) {
+        if(!in_array($test['order'], $arraytemp)) {
+            array_push($arraytemp, $test['order']);
+        } else {
+            array_push($arraytempnok, $test['id']);
+        }
+    }
+
+    // Supprime les recherches qui ont le même ordre dans le plugin
+    foreach ($arraytempnok as $debug) {
+        $DB->delete(
+            'glpi_plugin_mycustomview_savedsearch_list', [
+               'id' => $debug
+            ]
+         );
+    }
+
+    $debug_search = self::debug_search();
+
+    // Réapplique un ordre linéaire sur les recherches sauvegardées
+    for ($i = 1; $i <= count($debug_search); $i++) {
+        $a = $i - 1;
+        if ($debug_search[$a]['order'] != $i) {
+            $debug = $debug_search[$a]['id'];
+            
+            $DB->update(
+                'glpi_plugin_mycustomview_savedsearch_list', [
+                   'order'      => $i
+                ], [
+                   'id' => $debug
+                ]
+            );
+        }
+    }
    }
 
    static function getSavedSearchById($id)
@@ -50,18 +244,25 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       global $DB;
 
-      $table = 'glpi_savedsearches';
-      $result = $DB->request([
-         'SELECT' =>
-         "$table.*",
-         'FROM' => $table,
+      $query = "SELECT *
+      FROM glpi_savedsearches
+      WHERE id = $id";
 
-         'WHERE' => [
-            "$table.id"    => $id
-         ]
-      ]);
+      $result = $DB->query($query);
 
-      return $result;
+      // Test ok
+      // $result = $DB->request([
+      //     'FROM' => 'glpi_savedsearches',
+      //     'WHERE' => ['id' => $id],
+      // ]);
+
+      $array = array();
+
+      foreach ($result as $data){
+        array_push($array, $data);
+      }
+
+      return $array;
    }
 
    /**
@@ -72,36 +273,61 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    public static function getUserSavedSearchMcv($max_filters = null)
    {
       global $DB;
-      $data = [];
+      $id_user = Session::getLoginUserID();
 
-      $table = 'glpi_plugin_mycustomview_savedsearch_list';
-      $result = $DB->request([
-         'SELECT' =>
-         "$table.*",
-         'FROM' => $table,
+      $query = "SELECT McvSL.id, McvSL.user_id, McvSL.savedsearch_id, McvSL.order, McvSL.screen_mode, McvSL.height
+      FROM glpi_plugin_mycustomview_savedsearch_list McvSL
+      LEFT JOIN glpi_savedsearches GS ON McvSL.savedsearch_id = GS.id
+      WHERE user_id = $id_user
+      AND GS.id IS NOT NULL
+      ORDER BY `order` ASC";
 
-         'WHERE' => [
-            "$table.user_id"    => Session::getLoginUserID()
-         ],
-         'LIMIT' => $max_filters,
-         'ORDER' => "$table.order ASC"
-      ]);
+      $result = $DB->query($query);
 
-      foreach ($result as $dataRow) {
-         array_push($data, $dataRow);
+      // Test ok
+      // $result = $DB->request([
+      //     'SELECT' => ['McvSL.id', 'McvSL.user_id', 'McvSL.savedsearch_id', 'McvSL.order', 'McvSL.screen_mode', 'McvSL.height'],
+      //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list AS McvSL',
+      //     'LEFT JOIN' => ['glpi_savedsearches' => ['FKEY' => ['McvSL' => 'savedsearch_id',
+      //                                                         'glpi_savedsearches' => 'id']]],
+      //     'WHERE' => ['user_id' => $id_user, 'NOT' => ['glpi_savedsearches.id' => $id_user]],
+      //     'ORDER' => ['order ASC']
+      // ]);
+
+      $array = array();
+
+      foreach ($result as $data) {
+         array_push($array, $data);
       }
-      return $data;
+      return $array;
    }
 
    public static function countUserSavedSearchMcv()
    {
       global $DB;
-      $result = $DB->request([
-         'FROM'   => 'glpi_plugin_mycustomview_savedsearch_list',
-         'COUNT'  => 'cpt',
-         'WHERE'  => ['user_id' => Session::getLoginUserID()]
-      ])->next();
-      return $result['cpt'];
+
+      $id_user = Session::getLoginUserID();
+
+      $query = "SELECT COUNT(*) as cpt
+      FROM glpi_plugin_mycustomview_savedsearch_list McvL
+      LEFT JOIN glpi_savedsearches GS ON McvL.savedsearch_id = GS.id
+      WHERE user_id = $id_user
+      AND GS.id IS NOT null";
+
+      $result = $DB->query($query);
+
+      // Test ok
+      // $result = $DB->request([
+      //   'SELECT' => ['COUNT' => 'McvL.id as cpt'],
+      //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list AS McvL',
+      //   'LEFT JOIN' => ['glpi_savedsearches AS GS' => ['FKEY' => ['McvL' => 'savedsearch_id',
+      //                                                             'GS' => 'id']]],
+      //   'WHERE' => ['user_id' => $id_user, 'NOT' => ['GS.id' => NULL]]
+      // ]);
+
+      foreach ($result as $data){
+        return $data['cpt'];
+      }
    }
 
    /**
@@ -112,25 +338,62 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    public static function addSavedSearch($id, $user, $order)
    {
       global $DB;
-      $insert_query = $DB->buildInsert(
-         'glpi_plugin_mycustomview_savedsearch_list',
-         [
-            'user_id'      =>new QueryParam(),
-            'savedsearch_id'  => new QueryParam(),
-            'order'      => new QueryParam(),
-            'screen_mode' => 0,
-            'height' => 650
-         ]
-      );
-      $stmt = $DB->prepare($insert_query);
-      $stmt->bind_param(
-         'iii',
-         $user,
-         $id,
-         $order
-      );
-      $stmt->execute();
-      return $stmt;
+      $max_filters = PluginMycustomviewConfig::getMaxFilters();
+      $check_max_filters = self::check_max_filters();
+      $limit_filters = $check_max_filters['order'];
+
+      if ($limit_filters >= $max_filters) {
+        Session::addMessageAfterRedirect(
+            __(
+                "La recherche n'a pas été sauvegardée",
+                "mycustomview"
+            ),
+            true,
+            ERROR
+        );
+        return false;
+      } else {
+        $id_user = Session::getLoginUserID();
+
+        $query = "SELECT COUNT(*) as tot
+        FROM glpi_plugin_mycustomview_savedsearch_list
+        WHERE user_id = $id_user";
+
+        $result = $DB->query($query);
+
+      // Test ok
+      //   $result = $DB->request([
+      //     'SELECT' => ['COUNT' => 'id AS tot'],
+      //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
+      //     'WHERE' => ['user_id' => 7]
+      // ]);
+
+        foreach ($result as $data) {
+            if ($data['tot'] != 0) {
+                $order = $order + 1;
+            }
+        }
+
+        $insert_query = $DB->buildInsert(
+            'glpi_plugin_mycustomview_savedsearch_list',
+            [
+                'user_id'      => new QueryParam(),
+                'savedsearch_id'  => new QueryParam(),
+                'order'      => new QueryParam(),
+                'screen_mode' => 0,
+                'height' => 650
+            ]
+        );
+        $stmt = $DB->prepare($insert_query);
+        $stmt->bind_param(
+            'iii',
+            $user,
+            $id,
+            $order
+        );
+        $stmt->execute();
+        return $stmt;
+      }
    }
 
    static function checkUnicitySavedSearch($id)
@@ -180,17 +443,21 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    {
       global $DB;
 
-      $table = 'glpi_plugin_mycustomview_savedsearch_list';
-      $result = $DB->request([
-         'SELECT' =>
-         "$table.*",
-         'FROM' => $table,
+      $id_user = Session::getLoginUserID();
 
-         'WHERE' => [
-            "$table.user_id"    => Session::getLoginUserID()
-         ],
-         'ORDER' => "$table.order ASC"
-      ]);
+      $query = "SELECT *
+      FROM glpi_plugin_mycustomview_savedsearch_list
+      WHERE user_id = $id_user
+      ORDER BY `order` ASC";
+
+      $result = $DB->query($query);
+
+      // Test ok
+      // $result = $DB->request([
+      //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
+      //   'WHERE' => ['user_id' => $id_user],
+      //   'ORDER' => 'order ASC'
+      // ]);
 
       $i = 1;
 
@@ -265,11 +532,28 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    static public function getUserSettings(){
       global $DB;
 
-      $table = 'glpi_plugin_mycustomview_user_settings';
+      $id_user = Session::getLoginUserID();
 
-      $result = $DB->request(['FROM' => $table, 'WHERE'  => ['user_id' => Session::getLoginUserID()]])->next();
+      $query = "SELECT id, user_id, default_page, list_limit, settings_hidden
+      FROM glpi_plugin_mycustomview_user_settings 
+      WHERE user_id = $id_user";
 
-      return $result;
+      $result = $DB->query($query);
+
+      // Test ok
+      // $result = $DB->request([
+      //   'SELECT' => ['id', 'user_id', 'default_page', 'list_limit', 'settings_hidden'],
+      //   'FROM' => 'glpi_plugin_mycustomview_user_settings',
+      //   'WHERE' => ['user_id' => $id_user]
+      // ]);
+
+      $array = array();
+
+      foreach($result as $data) {
+        array_push($array, $data);
+      }
+
+      return $array;
    }
 
    public static function isDefaultPageOfUser()
@@ -477,15 +761,26 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     */
    static function displaySavedSearchListMcv($result, $userName, $idList)
    {
+      global $indexBloc;
+      $theServer = $_SERVER["HTTP_REFERER"];
+      $theServer = str_replace("central.php", "", $theServer);
+      $max_filters = PluginMycustomviewConfig::getMaxFilters();
+
+      if ($indexBloc >= $max_filters) {
+        echo "<div style='text-align: center;'>";
+        echo "<h2>".__("Vous avez atteint le nombre de recherches sauvegardées maximum sur cette page", "mycustomview") . ".</h2>";
+        echo "<h2>".__("Veuillez supprimer au moins une vue si vous souhaitez en rajouter d'autres", "mycustomview") . ".</h2>";
+        echo "</div>";
+      }
 
       echo "<div class='center mcv_tab_limit'>";
       echo "<table border='0' class='tab_cadrehov'>";
       echo "<thead>";
       echo "<tr class='tab_bg_2'>";
-      echo "<th>Nom</th>";
-      echo "<th>Type d'élément</th>";
-      echo "<th>Utilisateur/Type de recherche</th>";
-      echo "<th class='sorter-false'>Ajouter <i class='fa fa-plus' title='Sauvegarder cette recherche dans cette vue'></i></th>";
+      echo "<th>" .__("Nom", "mycustomview") . "</th>";
+      echo "<th>" .__("Type d'élément", "mycustomview") . "</th>";
+      echo "<th>" .__("Utilisateur/Type de recherche", "mycustomview") . "</th>";
+      echo "<th class='sorter-false'>" .__("Ajouter", "mycustomview") . " <i class='fa fa-plus' title='" .__("Sauvegarder cette recherche dans cette vue", "mycustomview") . "'></i></th>";
       echo "</thead>";
       echo "<tbody>";
 
@@ -495,34 +790,32 @@ class PluginMycustomviewSavedSearch extends SavedSearch
             $data['name'] = $data['id'];
          }
          echo "<tr class='center'>";
-         echo "<td><a href='/front/" . strtolower($data['itemtype']) . ".php?" . $data['query'] . "'>" . $data['name'] . "</a></td>";
+         echo "<td><a href='$theServer" . strtolower($data['itemtype']) . ".php?" . $data['query'] . "'>" . $data['name'] . "</a></td>";
          echo "<td>" . $data['itemtype'] . "</td>";
          echo "<td>";
          if ($data['users_id'] == Session::getLoginUserID()) {
-            if($data['is_private'] == 0) {
-               echo "Votre recherche publique";
+            if ($data['is_private'] == 0) {
+               echo __("Votre recherche publique", "mycustomview");
             }
             else {
                echo $userName;
             }
          }
          else {
-            echo "Recherche publique";
+            echo __("Recherche publique", "mycustomview");
          }
          echo "</td>";
          if (isset($idList)) {
-
             foreach ($idList as $id) {
-
                if ($id == $data['id']) {
                   $isAlreadyAdded = true;
                   break;
                }
             }
             if ($isAlreadyAdded) {
-               echo "<td><b>Déjà ajoutée</b></td>";
-            } else {
-               echo "<td class='save_search_mcv'><i style ='cursor: pointer' class='fa fa-plus' data-id-saved-search='" . $data['id'] . "' title='Sauvegarder cette recherche dans cette vue'></i></td>";
+               echo "<td><b>" .__("Déjà ajoutée", "mycustomview") . "</b></td>";
+            } else {      
+                echo "<td class='save_search_mcv'><i style ='cursor: pointer' class='fa fa-plus' data-id-saved-search='" . $data['id'] . "' title='" .__("Sauvegarder cette recherche dans cette vue", "mycustomview") . "'></i></td>";      
             }
          }
          echo "</tr>";
@@ -535,6 +828,41 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       self::addSavedSearchScriptMcv();
    }
 
+    /**
+    * Vérifie que la limite ne dépasse pas le max filter
+    *
+    * @return $data int
+    */
+   public static function check_max_filters()
+   {
+    global $DB;
+    $id_user = Session::getLoginUserID();
+
+    $query = "SELECT `order`
+    FROM glpi_plugin_mycustomview_savedsearch_list
+    WHERE user_id = $id_user
+    ORDER BY `order` DESC
+    LIMIT 1";
+
+    $result = $DB->query($query);
+
+    // Test ok
+    // $result = $DB->request([
+    //   'SELECT' => ['order'],
+    //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
+    //   'WHERE' => ['user_id' => $id_user],
+    //   'ORDER' => 'order DESC',
+    //   'LIMIT' => 1
+    // ]);
+
+    // foreach ($result as $data) {
+    //     return $data;
+    // }
+
+    foreach ($result as $data) {
+        return $data;
+    }
+   }
 
    /**
     * Ajoute le javascript nécessaire au fonctionnement de la page
@@ -760,9 +1088,14 @@ class PluginMycustomviewSavedSearch extends SavedSearch
    public static function maxSavedSearchReached()
    {
 
-      echo "<div class='center mcv_text_limit'>";
-      echo "<h2>Vous avez atteint le nombre de recherches sauvegardées maximum sur cette page.</h2>";
-      echo "</div>";
+    Session::addMessageAfterRedirect(
+        __(
+            "Vous avez atteint le nombre de recherches sauvegardées maximum sur cette page",
+            "mycustomview"
+        ),
+        true,
+        ERROR
+    );
    }
 
    /**
@@ -772,19 +1105,19 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     */
    public static function displaySavedSearchMcv($data)
    {
-      echo "<button class='mcv_delete mcv_display_none'><i class='fas fa-2x fa-trash'></i>Supprimer</button>";
-      echo '<h1>Futur affichage dun tableau ! En construction</h1>';
-      echo 'Voici un tableau de la SavedSearch numéro ' . $data['savedsearch_id'];
-      echo '<br>';
-      echo 'Lordre de ce tableau est le : ' . $data['order'];
+      echo "<button class='mcv_delete mcv_display_none'><i class='fas fa-2x fa-trash'></i>" .__("Supprimer","mycustomview") . "</button>";
+      echo "<h1>" .__("Futur affichage d'un tableau ! En construction","mycustomview") . "</h1>";
+      echo __("Voici un tableau de la SavedSearch numéro","mycustomview") . " " . $data['savedsearch_id'];
+      echo "<br>";
+      echo __("L'ordre de ce tableau est le","mycustomview") . " : " . $data['order'];
       echo "<div class='center mcv_savedsearch_container' data-id-savedsearch='" . $data['id'] . "'>";
       echo "<table border='0' class='tab_cadrehov'>";
       echo "<thead>";
       echo "<tr class='tab_bg_2'>";
-      echo "<th>Nom</th>";
-      echo "<th>Type d'élément</th>";
-      echo "<th>Utilisateur</th>";
-      echo "<th><a href='#' class='fa fa-star' style='color:white' title='Sauvegarder cette recherche dans cette vue'></a></th>";
+      echo "<th>" .__("Nom","mycustomview") . "</th>";
+      echo "<th>" .__("Type d'élément","mycustomview") . "</th>";
+      echo "<th>" .__("Utilisateur","mycustomview") . "</th>";
+      echo "<th><a href='#' class='fa fa-star' style='color:white' title='" .__("Sauvegarder cette recherche dans cette vue","mycustomview") . "'></a></th>";
       echo "</thead>";
       echo "</table>";
       echo "</div>";
@@ -792,10 +1125,10 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
    public static function displayHelpModal()
    {
-      echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_large mcv_modal_help mcv_display_none'>";
-      echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
+      echo "<div style='z-index: 10002;' class='mcv_modal mcv_modal_bg_light mcv_modal_large mcv_modal_help mcv_display_none' role='dialog'>";
+      echo "<button title='" .__("Fermer","mycustomview") . "' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
       echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
-      echo "<h2 class='text-center m-auto mcv_modal_header_text'>Comment ça marche ?</h2>";
+      echo "<h2 class='text-center m-auto mcv_modal_header_text'>" .__("Comment ça marche","mycustomview") . " ?</h2>";
       echo "</div>";
 
       echo " <div class='flexslider'>";
@@ -803,90 +1136,149 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       echo "<li>";
       echo "<div class='p-5'>";
-      echo "<p class='subtitle_modal m-5'>Etape 1 (Prérequis) : Création d'une ou plusieurs Recherche(s) sauvegardée(s)</p><br>";
-      echo "<p><span class='font-bigger'>Votre onglet <b>« Ma vue personnalisée »</b> fait appel à la fonctionnalité de <b>« Recherches sauvegardées »</b> (équivalent à se créer des filtres personnalisés).</span><br><br>";
-      echo "<u>Suivre la procédure ci-dessous pour créer une (ou plusieurs) recherches :<br><br></u>";
-      echo "•	Dans le menu <b>Assistance / Tickets</b>, effectuez une nouvelle recherche en positionnant les filtres souhaités puis cliquez sur <b>« Rechercher »</b>. Il vous reste à sauvegarder votre recherche en cliquant sur le symbole en étoile :";
+      echo "<p class='subtitle_modal m-5'>" .__("Etape 1 (Prérequis) : Création d'une ou plusieurs Recherche(s) sauvegardée(s)","mycustomview") . " </p><br>";
+      echo "<p><span class='font-bigger'>" .__("Votre onglet","mycustomview") . " <b>« " .__("Ma vue personnalisée","mycustomview") . " »</b> " .__("fait appel à la fonctionnalité de","mycustomview") . " <b>« " .__("Recherches sauvegardées","mycustomview") . " »</b> " .__("(équivalent à se créer des filtres personnalisés)","mycustomview") . ".</span><br><br>";
+      echo "<u>" .__("Suivre la procédure ci-dessous pour créer une (ou plusieurs) recherches","mycustomview") . " :<br><br></u>";
+      echo "•	" .__("Dans le menu","mycustomview") . " <b>" .__("Assistance / Tickets","mycustomview") . "</b>, " .__("effectuez une nouvelle recherche en positionnant les filtres souhaités puis cliquez sur","mycustomview") . " <b>« " .__("Rechercher","mycustomview") . " »</b> " .__(". Il vous reste à sauvegarder votre recherche en cliquant sur le symbole en étoile","mycustomview") . " :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img1.png' class='w-auto m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+            echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_1.png' style='max-height: 300px;' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+            echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_1.png' style='max-height: 300px;' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "</li>";
 
       echo "<li>";
-      echo "<div class='p-5'><p>";
-      echo "•	Nommez votre recherche et cliquez sur <b>Ajouter</b> :";
+      echo "<div class='p-5'><p style='margin: 0;'>";
+      echo "•	" .__("Nommez votre recherche et cliquez sur","mycustomview") . " <b>" .__("Ajouter","mycustomview") . "</b> :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img2.png' class='w-auto m-auto maxw-50 p-3 flexImages'/>";
-      echo "<div class='p-5'><p>";
-      echo "•	 Vous avez la possibilité de faire des recherches sur d’autres objets GLPI comme les ordinateurs (Menu <b>Parc / Ordinateurs</b>) :";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_2.png' style='max-height: 250px;' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_2.png' style='max-height: 250px;' class='w-auto m-auto p-3 flexImages'/>";
+      }
+      echo "<div class='p-5'><p style='margin: 0;'>";
+      echo "•	 " .__("Vous avez la possibilité de faire des recherches sur d'autres objets GLPI comme les ordinateurs (Menu","mycustomview") . " <b>" .__("Parc / Ordinateurs","mycustomview") . ")</b> :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img3.png' class='w-auto maxw-50 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_3.png' style='max-height: 300px;' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_3.png' style='max-height: 300px;' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "  </li>";
 
       echo " <li>";
       echo "<div class='p-5'>";
-      echo "<p class='subtitle_modal m-5'>Etape 2 : Construire sa vue personnalisée</p><br>";
-      echo "<p>•	Dans la page d’accueil, cliquez sur l’onglet <b>« Ma vue personnalisée »</b>. Par défaut aucune recherche s’affiche :";
+      echo "<p class='subtitle_modal m-5'>" .__("Etape 2 : Construire sa vue personnalisée","mycustomview") . "</p><br>";
+      echo "<p>•	" .__("Dans la page d'accueil, cliquez sur l'onglet","mycustomview") . " <b>« " .__("Ma vue personnalisée","mycustomview") . " » </b>" .__("(Par défaut aucune recherche ne s'affiche)","mycustomview") . ". " . __("Puis cliquez sur le bouton", "mycustomview") . " « <strong>" . strtoupper(__("Modifier", "mycustomview")) . "</strong> » :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img4.png' class='w-auto maxw-80 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_4.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_4.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "<div class='p-5'><p>";
-      echo "•	  Cliquez sur le symbole <b>« + »</b> face à la recherche sauvegardée que vous souhaitez afficher. Une fois sélectionnée, celle-ci s’affiche dans votre vue et est indiquée comme <b>« Déjà ajoutée »</b>";
+      echo "•	  " .__("En bas de page, cliquez sur le bouton","mycustomview") . " <b>« " . strtolower(__("Afficher la liste", "mycustomview")) . " " . "»</b> " .__("puis cliquez sur le symbole","mycustomview") . " <b>« + »</b> " .__("face à la recherche sauvegardée que vous souhaitez afficher.", "mycustomview");
+      echo "<br>";
+      echo __("Une fois sélectionnée, celle-ci s'affiche dans votre vue et est indiquée comme","mycustomview") . " <b>« " .__("Déjà ajoutée","mycustomview") . " »</b>.";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img5.png' class='w-auto maxw-80 m-auto p-3 flexImages'/>";
-      echo "  <img src='../plugins/mycustomview/images/img6.png' class='w-auto maxw-80 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_5.png' class='w-auto m-auto p-3 flexImages'/>";
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_6.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_5.png' class='w-auto m-auto p-3 flexImages'/>";
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_6.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "  </li>";
 
       echo "<li>";
       echo "<div class='p-5'>";
-      echo "<p>•	Une fois vos recherches ajoutées, vous avez la possibilité en cliquant sur le bouton <b>« Modifier »</b> de :<br><br>
-          -	Réorganiser vos fenêtres de recherche via un cliquer-Glisser :";
-      echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img7.png' class='w-auto maxw-45 m-auto p-3 flexImages'/>";
+      echo "<p>•	" .__("Une fois vos recherches ajoutées, vous avez la possibilité en cliquant sur le bouton","mycustomview") . " <b>« " .__("Modifier","mycustomview") . " »</b> " .__("de","mycustomview") . " :</p>
+          <p style='padding-left:2rem;'>-	" .__("Réorganiser vos fenêtres de recherche via un cliquer-Glisser","mycustomview") . " :</p>";
+      echo "</div>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_7.png' style='max-height: 400px;' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_7.png' style='max-height: 400px;' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "</li>";
 
       echo "<li>";
-      echo "<div class='p-5'><p>";
-      echo "-  D’étendre ou de réduire votre fenêtre de recherche en utilisant les boutons « Fenêtre Large » ou « Fenêtre Réduite » :";
+      echo "<div class='p-5'><p style='padding-left:2rem;'>";
+      echo "-  " .__("D'étendre ou de réduire votre fenêtre de recherche en utilisant les boutons « Fenêtre Large » ou « Fenêtre Réduite »","mycustomview") . " :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img8.png' class='w-auto maxw-40 m-auto flexImages'/>";
-      echo "<div class='p-5'><p>";
-      echo "-  De renommer votre recherche en cliquant sur le symbole représentant un crayon :";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_8.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_8.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
+      echo "<div class='p-5'><p style='padding-left:2rem;'>";
+      echo "-  " .__("De renommer votre recherche en cliquant sur le symbole représentant un crayon","mycustomview") . " :";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img9.png' class='w-auto maxw-35 m-auto m-b-5 flexImages'/>";
-      echo "<div class='p-5'><p>";
-      echo "-  De supprimer de votre vue une recherche en cliquant sur le bouton <b>« Supprimer » </b>:";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_9.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_9.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
+      echo "<div class='p-5'><p style='padding-left:2rem;'>";
+      echo "-  " .__("De supprimer de votre vue une recherche en cliquant sur le bouton <b>« Supprimer »</b>","mycustomview") . " : ";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img10.png' class='w-auto maxw-10 m-auto flexImages'/>";
-      echo "<div class='p-5'><p>";
-      echo "<span style='color: red'><b>IMPORTANT</b></span> : Une fois vos modifications effectuées, enregistrez-les en utilisant en cliquant sur le bouton <b>« Enregistrer »</b> :";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_10.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_10.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
+      echo "<div class='p-5' style='text-align: center;'><p>";
+      echo "<span style='color: red'><b>" .__("IMPORTANT","mycustomview") . "</b></span> : " .__("Une fois vos modifications effectuées, enregistrez-les en cliquant sur le bouton <b>« Enregistrer »</b>", "mycustomview") . " : ";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img11.png' class='w-auto maxw-10 m-auto flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_11.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_11.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo " </li>";
 
       echo "<li>";
       echo "<div class='p-5'>";
-      echo "<p class='subtitle_modal m-5'>Etape 3 : Personnaliser les champs visibles dans votre tableau</p><br>";
-      echo "<p>•	Cliquez sur le symbole « Clef » pour sélectionner les champs souhaités :</b>";
+      echo "<p class='subtitle_modal m-5'>" .__("Etape 3 : Personnaliser les champs visibles dans votre vue","mycustomview") . "</p><br>";
+      echo "<p>•	" .__("Cliquez sur le symbole « Clef » pour sélectionner les champs souhaités","mycustomview") . " :</b>";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img12.png' class='w-auto maxw-40 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_12.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_12.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "<div class='p-5'><p>";
-      echo "•	Sélectionnez le/les champ(s) à afficher dans la fenêtre qui s’affiche puis validez en cliquant sur <b>« Ajouter »</b> : ";
+      echo "•	" .__("Sélectionnez « Vue Personnelle » puis le champ à afficher et cliquer sur le bouton <b>« Ajouter »</b>","mycustomview") . " : ";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img13.png' class='w-auto maxw-60 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_13.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_13.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo " </li>";
 
       echo " <li>";
       echo "<div class='p-5'>";
-      echo "<p class='subtitle_modal m-5'>Etape 4 : Les options supplémentaires</p><br>";
-      echo "<p>•	Cochez la case « Page par défaut » si vous souhaitez avoir l’onglet « Ma vue personnalisée » comme page par défaut lors de vos prochaines connexions</b>";
+      echo "<p class='subtitle_modal m-5'>" .__("Etape 4 : Les options supplémentaires","mycustomview") . "</p><br>";
+      echo "<p>•	" .__("Cochez la case « Page par défaut » pour positionner l'onglet « Ma vue personnalisée » comme page par défaut.","mycustomview") . "</b>";
       echo "</p>";
-      echo "<p>•	Sélectionnez le nombre d'éléments que vous souhaitez afficher par recherche</b>";
+      echo "<p>•	" .__("Sélectionnez le nombre d'éléments que vous souhaitez afficher par recherche","mycustomview") . ".";
       echo "</p></div>";
-      echo "  <img src='../plugins/mycustomview/images/img14.png' class='w-auto maxw-80 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_14.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_14.png' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "<div class='p-5'>";
-      echo "<p>•	Vous pouvez agrandir la taille de vos fenêtres en tirant le bouton tout en bas à droite (accessible en mode « Modification »)";
+      echo "<p>•	" .__("Vous pouvez agrandir votre vue en étirant la fenêtre bas à droite (accessible en mode « Modification »)","mycustomview");
       echo "</p>";
       echo "</div>";
-      echo " <img src='../plugins/mycustomview/images/img15.png' class='w-auto maxw-80 m-auto p-3 flexImages'/>";
+      if ($_SESSION['glpilanguage'] == 'fr_FR') {
+        echo "  <img src='../plugins/mycustomview/images/fr/Aide_MCV_VF_15.png' class='w-auto m-auto p-3 flexImages'/>";
+      } else {
+        echo "  <img src='../plugins/mycustomview/images/en/Help_MCV_EV_15.png' style='max-width: 500px;' class='w-auto m-auto p-3 flexImages'/>";
+      }
       echo "  </li>";
 
       echo " </ul>";
@@ -896,31 +1288,31 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
    public static function displayChangeTitleModal()
    {
-      echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_modal_edit_title mcv_display_none'>";
-      echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
+      echo "<div style='z-index: 10002; text-align: center;' class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_modal_edit_title mcv_display_none' role='dialog'>";
+      echo "<button title='" .__("Fermer","mycustomview") . "' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
       echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
-      echo "<h2 class='text-center m-auto mcv_modal_header_text'>Modification du titre</h2>";
+      echo "<h2 class='text-center m-auto mcv_modal_header_text'>" .__("Modification du titre","mycustomview") . "</h2>";
       echo "</div>";
-      echo "<h3 class='mcv_modal_text_edit_title'>Saisissez le nouveau titre de cette recherche</h3>";
+      echo "<h3 class='mcv_modal_text_edit_title'>" .__("Saisissez le nouveau titre de cette recherche","mycustomview") . "</h3>";
       echo "<input type='hidden' name='id_savedsearch'></input>";
       echo "<input type='text' class='savedsearch_title'></input>";
 
-      echo "<button class='mcv_button mcv_button_success mcv_text_light mcv_change_title'>Valider</button>";
+      echo "<button class='mcv_button mcv_button_success mcv_text_light mcv_change_title'>" .__("Valider","mycustomview") . "</button>";
       echo "</div>";
    }
 
    public static function displayCancelModal()
    {
 
-      echo "<div class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_cancel_message mcv_display_none'>";
-      echo "<button title='Fermer' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
+      echo "<div style='z-index: 10002; position:fixed;' class='mcv_modal mcv_modal_bg_light mcv_modal_very_small mcv_cancel_message mcv_display_none'>";
+      echo "<button title='" .__("Fermer","mycustomview") . "' class='mcv_modal_close p-none mcv_button_basic'><i class='fas fa-3x fa-window-close' data-modaltype='help' aria-hidden='true'></i></button>";
       echo "<div class='mcv_modal_bg_basic mcv_text_light mcv_modal_header'>";
-      echo "<h2 class='text-center m-auto mcv_modal_header_text'>Attention</h2>";
+      echo "<h2 class='text-center m-auto mcv_modal_header_text'>" .__("Attention","mycustomview") . "</h2>";
       echo "</div>";
-      echo "<p class='mcv_text_dark mcv_message_text text-center font-bigger'>Vous allez abandonner vos modifications (déplacements/suppressions de fenêtres).</br>Êtes-vous sûr de confirmer ?";
+      echo "<p style='padding:1rem .5rem;' class='mcv_text_dark mcv_message_text text-center font-bigger'>" .__("Annuler la modification ? Aucun changement ne sera sauvegardé","mycustomview") . ".</br>" .__("Êtes-vous sûr de confirmer","mycustomview") . " ?";
       echo "</p>";
       echo "<div class='mcv_modal_footer d-flex flex-end'>";
-      echo "<button class='mcv_button mcv_button_dark mcv_text_light mcv_button_dark mcv_button_popup mcv_button_message_cancel'>Confirmer</button>";
+      echo "<button class='mcv_button mcv_button_dark mcv_text_light mcv_button_dark mcv_button_popup mcv_button_message_cancel'>" .__("Confirmer","mycustomview") . "</button>";
       echo "</div>";
       echo "</div>";
       echo "</div>";

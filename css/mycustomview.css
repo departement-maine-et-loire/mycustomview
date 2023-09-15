@@ -28,7 +28,7 @@
 }
 
 .mcv_modal_bg_basic {
-	background-color : #3e0635;
+	background-color : #3a5693;
 }
 
 .mcv_modal_small {
@@ -180,7 +180,7 @@
 }
 
 .mcv_button_basic {
-	background-color: #3e0635;
+	background-color: #3a5693;
 }
 
 .mcv_button_dark {
@@ -239,6 +239,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+    text-align: center;
 	color: white;
 	z-index: 10;
 }

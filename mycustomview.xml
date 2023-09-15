@@ -2,7 +2,7 @@
   <name>MyCustomView</name>
   <key>mycustomview</key>
   <!-- stable, beta, development, alpha, ... -->
-  <state>beta</state>
+  <state>stable</state>
   <logo>https://www.zupimages.net/up/21/21/1cn4.png</logo>
   <description>
     <short>
@@ -12,7 +12,7 @@
     </short>
     <long>
       <!-- Add as many lang tag you want -->
-      <en>/!\ ONLY FRENCH AVAILABLE /!\</en>
+      <en>MyCustomView is a plugin for organising your Central View in a customised way.</en>
       <fr>MyCustomView est un plugin destin&#xE9; &#xE0; l'organisation de sa vue Centrale de mani&#xE8;re personnalis&#xE9;e.</fr>
     </long>
   </description>
@@ -24,16 +24,14 @@
     <!-- Add as many author tag you want -->
     <author>D&#xE9;partement de Maine-et-Loire</author>
     <author>Maxime MERIOT</author>
+    <author>Yannick COMBA</author>
   </authors>
   <versions>
     <!-- Add as many version tag you want -->
     <version>
-      <num>1.2.1</num>
+      <num>2.0.0</num>
       <!-- Add as many compatibility tag you want -->
-      <compatibility>9.5</compatibility>
-      <compatibility>9.4</compatibility>
-      <compatibility>9.3</compatibility>
-      <compatibility>9.2</compatibility>
+      <compatibility>10.0</compatibility>
     </version>
   </versions>
   <langs>
