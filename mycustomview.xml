@@ -37,6 +37,7 @@
   <langs>
     <!-- Add as many lang tag you want -->
     <lang>fr_FR</lang>
+    <lang>en_GB</lang>
   </langs>
   <license>GPL V3+</license>
   <tags>
@@ -50,7 +51,9 @@
     </fr>
   </tags>
   <screenshots>
-    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/normal-mode.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/edit-mode.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/MyCustomView_V10_FR_1.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/MyCustomView_V10_FR_2.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/MyCustomView_V10_GB_1.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/mycustomview/develop/images/wiki/MyCustomView_V10_GB_2.png</screenshot>
   </screenshots>
 </root>
