@@ -36,16 +36,20 @@ class PluginMycustomviewProfile extends Profile
 
     static function getAllRights() {
         $rights = [
-            // N'est utile que si on prend en compte le droit de lecture
-            // ['itemtype'  => 'PluginMyCustomViewRead',
-            //       'label'     => __('Read', 'mycustomview'),
-            //       'field'     => 'plugin_mycustomview_read',
-            //       'rights'    => [READ => __('Read')]],
             ['itemtype'  => 'PluginMyCustomViewUse',
-                  'label'     => __('Use', 'mycustomview'),
+                  'label'     => __('Modification (création et suppression)', 'mycustomview'),
                   'field'     => 'plugin_mycustomview_use',
-                  'rights'    => [READ => __('Read')]]];
+                  'rights'    => [ALLSTANDARDRIGHT => __('Read')]]];
           return $rights;
+    }
+
+    function cleanProfiles($ID) {
+
+        global $DB;
+        $query = "DELETE FROM `glpi_profiles`
+                  WHERE `profiles_id`='$ID'
+                  AND `name` LIKE '%plugin_mycustomview%'";
+        $DB->query($query);
     }
 
     /**
@@ -114,8 +118,6 @@ class PluginMycustomviewProfile extends Profile
 
         include_once Plugin::getPhpDir('mycustomview')."/inc/profile.class.php";
         foreach (self::getAllRights() as $right) {
-            // N'est utile que si on prend en compte le droit de lecture
-            // self::addDefaultProfileInfos($profiles_id, ['plugin_mycustomview_read' => READ]);
             self::addDefaultProfileInfos($profiles_id, ['plugin_mycustomview_use' => ALLSTANDARDRIGHT]);
         }
     }
@@ -138,89 +140,32 @@ class PluginMycustomviewProfile extends Profile
 
     public function showFormMcv($ID)
     {
-        global $CFG_GLPI;
-
-        $profiles_id = $_SESSION['glpiactiveprofile']['id'];
-
-        $showProfileId = $_GET['id'];
-        $checked = self::checkProfileRight($showProfileId);
+        echo "<div class='firstbloc'>";
+        if ($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE])) {
+           $profile = new Profile();
+           echo "<form method='post' action='".$profile->getFormURL()."'>";
+        }
+  
+        $profile = new Profile();
+        $profile->getFromDB($ID);
+  
+        $rights = self::getAllRights();
+        $profile->displayRightsChoiceMatrix(
+            $rights,
+            [
+               'canedit'       => $canedit,
+               'default_class' => 'tab_bg_2',
+               'title'         => __('General')
+            ]
+        );
         
-        if (Session::haveRight("profile", UPDATE)) {
-            echo "<form action='../plugins/mycustomview/inc/profile.php' method='post'>";
+        if ($canedit) {
+           echo "<div class='center'>";
+           echo Html::hidden('id', ['value' => $ID]);
+           echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
+           echo "</div>\n";
+           Html::closeForm();
         }
-        echo "<div align='center'>";
-            echo "<table class='tab_cadre_fixehov'>";
-                echo "<tr class='tab_bg_1'><th colspan='4'>" .__("Modifier les droits", "mycustomview") . "</th></tr>\n";
-                // N'est utile que si on prend en compte le droit de lecture
-                // echo "<tr class='tab_bg_2'>";
-                //     echo "<td width='20%'>" .__("Lecture (affichage de la vue)", "mycustomview") . "</td>";
-                //     echo "<td colspan='5'>";
-                //     echo "<input type='checkbox' id='readProfileMcv' name='readProfileMcv' class='form-check-input' value='readProfileMcv'";
-                //     if (!(Session::haveRight("profile", UPDATE))) {
-                //         echo " disabled ";
-                //     }
-                //     if ($checked == 31 || $checked == 1) {
-                //         echo "checked>";
-                //     } else {
-                //         echo ">";
-                //     }
-
-                //     echo "</td></tr>\n";
-                echo "<tr class='tab_bg_2'>";
-                    echo "<td width='20%'>" .__("Modification (création et suppression)", "mycustomview") . "</td>";
-                    echo "<td colspan='5'>";
-                    echo "<input type='checkbox' id='updateProfileMcv' name='updateProfileMcv' class='form-check-input' value = 'updateProfileMcv'";
-                    if (!(Session::haveRight("profile", UPDATE))) {
-                        echo " disabled ";
-                    }
-                    if ($checked == 31) {
-                        echo "checked>";
-                    } else {
-                        echo ">";
-                    }
-                echo "</td></tr>\n";
-            echo "</table>";
-
-            echo Html::hidden("id_profil", ["value" => "$showProfileId"]);
-
-            echo "<div class='center'>";
-                echo Html::hidden('id', ['value' => $ID, 'id' => 'profileId']);
-                if (Session::haveRight("profile", UPDATE)) {
-                    echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary', 'id' => 'updateMcv']);
-                }
-            echo "</div>\n";
         echo "</div>";
-        if (Session::haveRight("profile", UPDATE)){
-            Html::closeForm();
-        }
-
-        // Permets de cocher ou décocher les droits en fonction de la sélection
-        // N'est utile que si on prend en compte le droit de lecture
-        // $js = "
-        //     readProfileMcv = document.querySelector('#readProfileMcv')
-        //     updateProfileMcv = document.querySelector('#updateProfileMcv')
-
-        //     if (updateProfileMcv.checked) {
-        //         readProfileMcv.checked = true
-        //     }
-
-        //     if (!readProfileMcv.checked) {
-        //         updateProfileMcv.checked = false
-        //     }
-
-        //     readProfileMcv.addEventListener('change', function (event) {
-        //         if (!readProfileMcv.checked) {
-        //             updateProfileMcv.checked = false
-        //         }
-        //     })
-
-        //     updateProfileMcv.addEventListener('change', function (event) {
-        //         if (updateProfileMcv.checked) {
-        //             readProfileMcv.checked = true
-        //         }
-        //     })
-        // ";
-
-        // echo Html::scriptBlock($js);
     }
 }
