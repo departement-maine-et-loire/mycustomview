@@ -103,7 +103,7 @@ function plugin_mycustomview_uninstall()
 {
    global $DB;
 
-   $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config");
+   $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config", "glpi_plugin_mycustomview_profile_rights");
 
    foreach ($tables as $table) {
       $DB->query("DROP TABLE IF EXISTS `$table`;");
