@@ -139,7 +139,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
 
         if ($count == 0) {
             echo "<h1 class='center w-100'>" .__("Vous n'avez actuellement aucun filtre sauvegardé dans cette vue", "mycustomview") . ".</h1>";
-            echo "<h2 class='center w-100'>" .__("Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue", "mycustomview") . ".</h2>";
+            echo "<h2 class='center w-100'>" .__("Cliquez sur le bouton Modifier pour afficher la liste et ajouter des recherches sauvegardées à votre vue", "mycustomview") . ".</h2>";
         } else {
             // ------- DEBUG SEARCH ----------- //
             PluginMycustomviewSavedSearch::delete_bugged_search();

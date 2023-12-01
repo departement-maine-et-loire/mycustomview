@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: GLPI Plugin - MyCustomView\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-24 09:03+0000\n"
-"PO-Revision-Date: 2023-09-14 15:18+0200\n"
+"PO-Revision-Date: 2023-12-01 09:21+0100\n"
 "Last-Translator: Yannick Comba, 2022,2023\n"
 "Language-Team: French (France) (Département de Maine et Loire)\n"
 "Language: fr_FR\n"
@@ -58,8 +58,8 @@ msgid "Vous n'avez actuellement aucun filtre sauvegardé dans cette vue"
 msgstr "Vous n'avez actuellement aucun filtre sauvegardé dans cette vue"
 
 #: inc/bloc.class.php:102
-msgid "Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue"
-msgstr "Cliquez sur afficher la liste et ajoutez des recherches sauvegardées à votre vue"
+msgid "Cliquez sur le bouton Modifier pour afficher la liste et ajouter des recherches sauvegardées à votre vue"
+msgstr "Cliquez sur le bouton Modifier pour afficher la liste et ajouter des recherches sauvegardées à votre vue"
 
 #: inc/bloc.class.php:130
 msgid "Maintenez-moi pour me déplacer"
