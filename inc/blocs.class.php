@@ -221,7 +221,6 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
                             echo "</button>";
 
                             parse_str($array['query'], $p);
-                            unset($p['order'], $p['sort']);
 
                             PluginMycustomviewSearch::showListMcv($array['itemtype'], $p);
                         }
