@@ -48,7 +48,6 @@ class PluginMycustomviewConfig extends CommonDBTM
             'LIMIT' => 1
         ]
         );
-        //$query = "SELECT * FROM glpi_plugin_mycustomview_config";
 
         if ($result)
         {
@@ -84,17 +83,14 @@ class PluginMycustomviewConfig extends CommonDBTM
         global $DB;
 
         if($id != null){
-                if(isset($max_filters)){
-                $DB->update(
-                    'glpi_plugin_mycustomview_config', [
-                        'max_filters' => $max_filters
-                    ], [
-                        'WHERE' => ['id' => $id]
-                        ]
-                    );
-                    // OLD METHOD
-                //$query = "UPDATE glpi_plugin_mycustomview_config SET max_filters = '$max_filters' WHERE id = '1'";
-                //$DB->query($query) or die($DB->error());
+            if(isset($max_filters)){
+            $DB->update(
+                'glpi_plugin_mycustomview_config', [
+                    'max_filters' => $max_filters
+                ], [
+                    'WHERE' => ['id' => $id]
+                    ]
+                );
             }
         } 
         else {
@@ -102,11 +98,7 @@ class PluginMycustomviewConfig extends CommonDBTM
                 'glpi_plugin_mycustomview_config', [
                     'max_filters' => $max_filters
                 ]
-                );
-            // OLD METHOD
-            //$query = "INSERT INTO glpi_plugin_mycustomview_config (max_filters) VALUES ('$max_filters')";
-            //$DB->query($query) or die($DB->error());
-
+            );
         }
     }
 

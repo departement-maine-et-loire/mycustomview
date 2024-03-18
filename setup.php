@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.1');
+define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.3');
 
 /**
  * Init hooks of the plugin.
@@ -53,14 +53,6 @@ function plugin_init_mycustomview()
    ];
    $PLUGIN_HOOKS["javascript"]['mycustomview'] = [
       "/plugins/mycustomview/js/jquery.dad.js",
-   ];
-
-   // -- CSS --
-   $PLUGIN_HOOKS['add_css']['mycustomview'] = [
-      "/plugins/mycustomview/css/mycustomview.css",
-   ];
-   $PLUGIN_HOOKS['add_css']['mycustomview'] = [
-      "/plugins/mycustomview/css/theme.default.min.css",
    ];
 }
 

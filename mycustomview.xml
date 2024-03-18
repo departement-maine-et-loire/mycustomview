@@ -29,7 +29,7 @@
   <versions>
     <!-- Add as many version tag you want -->
     <version>
-      <num>2.0.0</num>
+      <num>2.0.3</num>
       <!-- Add as many compatibility tag you want -->
       <compatibility>10.0</compatibility>
     </version>

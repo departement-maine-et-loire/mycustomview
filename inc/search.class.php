@@ -121,8 +121,8 @@ class PluginMycustomviewSearch extends Search
        // Default values of parameters
         $p['criteria']            = [];
         $p['metacriteria']        = [];
-        $p['sort']                = ['nosort'];
-        $p['order']               = ['DESC'];
+        $p['sort']                = ['sort'];
+        $p['order']               = ['order'];
         $p['start']               = 0;//
         $p['is_deleted']          = 0;
         $p['export_all']          = 0;

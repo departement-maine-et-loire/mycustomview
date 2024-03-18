@@ -53,16 +53,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       $result = $DB->query($query);
 
-    // Test ok
-    // $result = $DB->request([
-    //     'SELECT' => ['GS.id', 'name', 'GS.itemtype', 'GS.users_id', 'is_private', 'query'],
-    //     'FROM' => 'glpi_savedsearches AS GS',
-    //     'LEFT JOIN' => ['glpi_savedsearches_users AS GSU' => ['FKEY' => ['GS' => 'id',
-    //                                                                        'GSU' => 'savedsearches_id']]],
-    //     'WHERE' => ['OR' => ['GS.users_id' => $id_user, 'GS.is_private' => 0]],
-    //     'LIMIT' => 50
-    // ]);
-
       $array = array();
 
       foreach ($result as $data){
@@ -90,13 +80,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
     $result = $DB->query($query);
 
-    // Test ok
-    // $result = $DB->request([
-    //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
-    //     'WHERE' => ['user_id' => $id_user],
-    //     'ORDER' => ['order ASC']
-    // ]);
-
     $array = array();
 
     foreach ($result as $data){
@@ -123,12 +106,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
     $result = $DB->query($query);
 
-    // Test ok
-    // $result = $DB->request([
-    //     'FROM' => 'glpi_savedsearches',
-    //     'WHERE' => ['users_id' => $id_user],
-    // ]);
-
     $array = array();
 
     foreach ($result as $data) {
@@ -153,12 +130,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     WHERE user_id = $id_user";
 
     $result = $DB->query($query);
-
-    //   Test ok
-    //   $result = $DB->request([
-    //       'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
-    //       'WHERE' => ['user_id' => $id_user],
-    //   ]);
 
     $array = array();
 
@@ -250,12 +221,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       $result = $DB->query($query);
 
-      // Test ok
-      // $result = $DB->request([
-      //     'FROM' => 'glpi_savedsearches',
-      //     'WHERE' => ['id' => $id],
-      // ]);
-
       $array = array();
 
       foreach ($result as $data){
@@ -284,16 +249,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       $result = $DB->query($query);
 
-      // Test ok
-      // $result = $DB->request([
-      //     'SELECT' => ['McvSL.id', 'McvSL.user_id', 'McvSL.savedsearch_id', 'McvSL.order', 'McvSL.screen_mode', 'McvSL.height'],
-      //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list AS McvSL',
-      //     'LEFT JOIN' => ['glpi_savedsearches' => ['FKEY' => ['McvSL' => 'savedsearch_id',
-      //                                                         'glpi_savedsearches' => 'id']]],
-      //     'WHERE' => ['user_id' => $id_user, 'NOT' => ['glpi_savedsearches.id' => $id_user]],
-      //     'ORDER' => ['order ASC']
-      // ]);
-
       $array = array();
 
       foreach ($result as $data) {
@@ -315,15 +270,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       AND GS.id IS NOT null";
 
       $result = $DB->query($query);
-
-      // Test ok
-      // $result = $DB->request([
-      //   'SELECT' => ['COUNT' => 'McvL.id as cpt'],
-      //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list AS McvL',
-      //   'LEFT JOIN' => ['glpi_savedsearches AS GS' => ['FKEY' => ['McvL' => 'savedsearch_id',
-      //                                                             'GS' => 'id']]],
-      //   'WHERE' => ['user_id' => $id_user, 'NOT' => ['GS.id' => NULL]]
-      // ]);
 
       foreach ($result as $data){
         return $data['cpt'];
@@ -360,13 +306,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
         WHERE user_id = $id_user";
 
         $result = $DB->query($query);
-
-      // Test ok
-      //   $result = $DB->request([
-      //     'SELECT' => ['COUNT' => 'id AS tot'],
-      //     'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
-      //     'WHERE' => ['user_id' => 7]
-      // ]);
 
         foreach ($result as $data) {
             if ($data['tot'] != 0) {
@@ -452,13 +391,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
 
       $result = $DB->query($query);
 
-      // Test ok
-      // $result = $DB->request([
-      //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
-      //   'WHERE' => ['user_id' => $id_user],
-      //   'ORDER' => 'order ASC'
-      // ]);
-
       $i = 1;
 
       foreach ($result as $liste) {
@@ -539,13 +471,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
       WHERE user_id = $id_user";
 
       $result = $DB->query($query);
-
-      // Test ok
-      // $result = $DB->request([
-      //   'SELECT' => ['id', 'user_id', 'default_page', 'list_limit', 'settings_hidden'],
-      //   'FROM' => 'glpi_plugin_mycustomview_user_settings',
-      //   'WHERE' => ['user_id' => $id_user]
-      // ]);
 
       $array = array();
 
@@ -845,19 +770,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     LIMIT 1";
 
     $result = $DB->query($query);
-
-    // Test ok
-    // $result = $DB->request([
-    //   'SELECT' => ['order'],
-    //   'FROM' => 'glpi_plugin_mycustomview_savedsearch_list',
-    //   'WHERE' => ['user_id' => $id_user],
-    //   'ORDER' => 'order DESC',
-    //   'LIMIT' => 1
-    // ]);
-
-    // foreach ($result as $data) {
-    //     return $data;
-    // }
 
     foreach ($result as $data) {
         return $data;
