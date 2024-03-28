@@ -32,11 +32,11 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginMycustomviewSavedSearch extends SavedSearch
 {
-   /**
-    * Récupère la liste de toutes les recherches sauvegardées par l'utilisateur
-    *
-    * @return $result (data from DB)
-    */
+    /**
+     * Récupère la liste de toutes les recherches sauvegardées par l'utilisateur
+     *
+     * @return $result (data from DB)
+     **/
     static function getSavedSearchListMcv()
     {
         global $DB;
@@ -342,9 +342,8 @@ class PluginMycustomviewSavedSearch extends SavedSearch
         }
     }
 
-    static function checkUnicitySavedSearch($id)
+    public static function checkUnicitySavedSearch($id)
     {
-
         $result = self::getUserSavedSearchMcv();
 
         foreach ($result as $data) {
@@ -667,6 +666,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
     public static function changeItemsNumber($id, $number)
     {
         global $DB;
+        
         $table = 'glpi_plugin_mycustomview_user_settings';
 
         $DB->update(

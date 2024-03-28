@@ -33,60 +33,60 @@
  */
 function plugin_mycustomview_install()
 {
-   global $DB;
+    global $DB;
 
-   PluginMycustomviewProfile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
-   
-   $default_charset = DBConnection::getDefaultCharset();
-   $default_collation = DBConnection::getDefaultCollation();
-   $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+    PluginMycustomviewProfile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
+    
+    $default_charset = DBConnection::getDefaultCharset();
+    $default_collation = DBConnection::getDefaultCollation();
+    $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-   // requete de création des tables
-   if (!$DB->TableExists("glpi_plugin_mycustomview_user_settings")) {
-      $query = "CREATE TABLE `glpi_plugin_mycustomview_user_settings` (
-         `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-         `user_id` INT {$default_key_sign} NOT NULL,
-         `default_page` TINYINT,
-         `list_limit` INT(11),
-         `settings_hidden` TINYINT,
-          PRIMARY KEY  (`id`)
-       ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+    // requete de création des tables
+    if (!$DB->TableExists("glpi_plugin_mycustomview_user_settings")) {
+        $query = "CREATE TABLE `glpi_plugin_mycustomview_user_settings` (
+            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+            `user_id` INT {$default_key_sign} NOT NULL,
+            `default_page` TINYINT,
+            `list_limit` INT(11),
+            `settings_hidden` TINYINT,
+            PRIMARY KEY  (`id`)
+        ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
-      $DB->query($query) or die("error creating glpi_plugin_mycustomview_user_settings " . $DB->error());
-   }
+        $DB->query($query) or die("error creating glpi_plugin_mycustomview_user_settings " . $DB->error());
+    }
 
-   if (!$DB->TableExists("glpi_plugin_mycustomview_savedsearch_list")) {
-      $query = "CREATE TABLE `glpi_plugin_mycustomview_savedsearch_list` (
-         `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-         `user_id` INT {$default_key_sign} NOT NULL,
-         `savedsearch_id` INT(11) NOT NULL,
-         `order` TINYINT,
-         `screen_mode` TINYINT,
-         `height` INT(11),
-          PRIMARY KEY  (`id`)
-       ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+    if (!$DB->TableExists("glpi_plugin_mycustomview_savedsearch_list")) {
+        $query = "CREATE TABLE `glpi_plugin_mycustomview_savedsearch_list` (
+            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+            `user_id` INT {$default_key_sign} NOT NULL,
+            `savedsearch_id` INT(11) NOT NULL,
+            `order` TINYINT,
+            `screen_mode` TINYINT,
+            `height` INT(11),
+            PRIMARY KEY  (`id`)
+        ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
-      $DB->query($query) or die("error creating glpi_plugin_mycustomview_savedsearch_list " . $DB->error());
-   }
+        $DB->query($query) or die("error creating glpi_plugin_mycustomview_savedsearch_list " . $DB->error());
+    }
 
-   if (!$DB->TableExists("glpi_plugin_mycustomview_config")) {
-      $query = "CREATE TABLE `glpi_plugin_mycustomview_config` (
-        `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-        `max_filters` TINYINT,
-         PRIMARY KEY  (`id`)
-      ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+    if (!$DB->TableExists("glpi_plugin_mycustomview_config")) {
+        $query = "CREATE TABLE `glpi_plugin_mycustomview_config` (
+            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+            `max_filters` TINYINT,
+            PRIMARY KEY  (`id`)
+        ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
-      $DB->query($query) or die("error creating glpi_plugin_mycustomview_config " . $DB->error());
+        $DB->query($query) or die("error creating glpi_plugin_mycustomview_config " . $DB->error());
 
-      $DB->insert(
-         'glpi_plugin_mycustomview_config',
-         [
-            'max_filters' => 6
-         ]
-      );
-   }
+        $DB->insert(
+            'glpi_plugin_mycustomview_config',
+            [
+                'max_filters' => 6
+            ]
+        );
+    }
 
-   return true;
+    return true;
 }
 
 /**
@@ -96,15 +96,15 @@ function plugin_mycustomview_install()
  */
 function plugin_mycustomview_uninstall()
 {
-   global $DB;
+    global $DB;
 
-   $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config", "glpi_plugin_mycustomview_profile_rights");
+    $tables = array("glpi_plugin_mycustomview_user_settings", "glpi_plugin_mycustomview_savedsearch", "glpi_plugin_mycustomview_savedsearch_list", "glpi_plugin_mycustomview_config", "glpi_plugin_mycustomview_profile_rights");
 
-   foreach ($tables as $table) {
-      $DB->query("DROP TABLE IF EXISTS `$table`;");
-   }
+    foreach ($tables as $table) {
+        $DB->query("DROP TABLE IF EXISTS `$table`;");
+    }
 
-   global $DB;
+    global $DB;
 
     $result = $DB->request([
         'SELECT' => ['profiles_id'],
@@ -121,18 +121,18 @@ function plugin_mycustomview_uninstall()
         );
     }
 
-   return true;
+    return true;
 }
 
 // vérification plugin activé + vérification du profil (si profil demandeur -> return)
 function changePageOnHome()
 {
-   $plugin = new Plugin();
-   if ($plugin->isActivated("mycustomview")) {
-      if (isset($_SESSION['glpiactiveprofile']['id'])) {
-         if ($_SESSION['glpiactiveprofile']['id'] == 1) {
-            return;
-         }
-      }
-   }
+    $plugin = new Plugin();
+    if ($plugin->isActivated("mycustomview")) {
+        if (isset($_SESSION['glpiactiveprofile']['id'])) {
+            if ($_SESSION['glpiactiveprofile']['id'] == 1) {
+                return;
+            }
+        }
+    }
 }
