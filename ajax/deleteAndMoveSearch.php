@@ -39,8 +39,9 @@ if (PluginMycustomviewProfile::checkProfileRight($_SESSION['glpiactiveprofile'][
 
 if (isset($_POST)) {
     if (isset($_POST['deleteTab'])) {
-            PluginMycustomviewSavedSearch::deleteSavedSearch($_POST['deleteTab']);
+        PluginMycustomviewSavedSearch::deleteSavedSearch($_POST['deleteTab']);
     }
+    
     if (isset($_POST['orderTab'])) {
         PluginMycustomviewSavedSearch::moveSavedSearch($_POST['orderTab']);
         PluginMycustomviewSavedSearch::reorderSavedSearch();

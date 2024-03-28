@@ -857,9 +857,9 @@ class PluginMycustomviewSavedSearch extends SavedSearch
                 else {
                     dif = true;
                 }
-    
-                if(dif) {
-                orderTab.push({id :id, order :newNumber});
+
+                if (dif) {
+                    orderTab.push({id :id, order :newNumber});
                 }
             });
     
@@ -868,7 +868,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
                 type: 'POST',
                 data: {orderTab:orderTab, deleteTab:deleteTabId, screenmodeTab:screenmodeTab, heightTab:heightTab},
                 success:function(data) {
-                window.location.reload();
+                    window.location.reload();
                 }
             });
         });
