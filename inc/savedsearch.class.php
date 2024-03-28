@@ -826,7 +826,6 @@ class PluginMycustomviewSavedSearch extends SavedSearch
         //  --------------
     
         $('#mcv_save').on('click', function(){
-    
             var tabs = $('.mcv_tab:not(:hidden)');
             var orderTab = [];
             deleteTab = [];
@@ -851,18 +850,10 @@ class PluginMycustomviewSavedSearch extends SavedSearch
                 // Il faut utiliser attr('data-nom') plutot que data('nom')
                 $(this).attr('data-number', index+1);
                 newNumber = $(this).attr('data-number');
-                if (number == newNumber) {
-                    dif = false;
-                }
-                else {
-                    dif = true;
-                }
 
-                if (dif) {
-                    orderTab.push({id :id, order :newNumber});
-                }
+                orderTab.push({id :id, order :newNumber});
             });
-    
+
             $.ajax({
                 url: '" . $CFG_GLPI['root_doc'] . "/plugins/mycustomview/ajax/deleteAndMoveSearch.php',
                 type: 'POST',
