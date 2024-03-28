@@ -33,53 +33,48 @@
  */
 function plugin_mycustomview_install()
 {
-
    global $DB;
 
-   // ------- On include les classes importantes
-   include_once(GLPI_ROOT . "/plugins/mycustomview/inc/mycustomview.class.php");
-   include_once(GLPI_ROOT . "/plugins/mycustomview/inc/profile.class.php");
-   include_once(GLPI_ROOT . "/plugins/mycustomview/inc/config.class.php");
-
    PluginMycustomviewProfile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
-
-   // première installation -> Création de la table dans la base
+   
+   $default_charset = DBConnection::getDefaultCharset();
+   $default_collation = DBConnection::getDefaultCollation();
+   $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
    // requete de création des tables
-
    if (!$DB->TableExists("glpi_plugin_mycustomview_user_settings")) {
       $query = "CREATE TABLE `glpi_plugin_mycustomview_user_settings` (
-         `id` INT(11) NOT NULL AUTO_INCREMENT,
-         `user_id` INT(11) NOT NULL,
+         `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+         `user_id` INT {$default_key_sign} NOT NULL,
          `default_page` TINYINT,
          `list_limit` INT(11),
          `settings_hidden` TINYINT,
           PRIMARY KEY  (`id`)
-       ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+       ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
       $DB->query($query) or die("error creating glpi_plugin_mycustomview_user_settings " . $DB->error());
    }
 
    if (!$DB->TableExists("glpi_plugin_mycustomview_savedsearch_list")) {
       $query = "CREATE TABLE `glpi_plugin_mycustomview_savedsearch_list` (
-         `id` INT(11) NOT NULL AUTO_INCREMENT,
-         `user_id` INT(11) NOT NULL,
+         `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+         `user_id` INT {$default_key_sign} NOT NULL,
          `savedsearch_id` INT(11) NOT NULL,
          `order` TINYINT,
          `screen_mode` TINYINT,
          `height` INT(11),
           PRIMARY KEY  (`id`)
-       ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+       ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
       $DB->query($query) or die("error creating glpi_plugin_mycustomview_savedsearch_list " . $DB->error());
    }
 
    if (!$DB->TableExists("glpi_plugin_mycustomview_config")) {
       $query = "CREATE TABLE `glpi_plugin_mycustomview_config` (
-        `id` INT(11) NOT NULL AUTO_INCREMENT,
+        `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
         `max_filters` TINYINT,
          PRIMARY KEY  (`id`)
-      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+      ) ENGINE=InnoDB  DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
       $DB->query($query) or die("error creating glpi_plugin_mycustomview_config " . $DB->error());
 
@@ -129,10 +124,9 @@ function plugin_mycustomview_uninstall()
    return true;
 }
 
+// vérification plugin activé + vérification du profil (si profil demandeur -> return)
 function changePageOnHome()
 {
-
-   // vérification plugin activé + vérification du profil (si profil demandeur -> return)
    $plugin = new Plugin();
    if ($plugin->isActivated("mycustomview")) {
       if (isset($_SESSION['glpiactiveprofile']['id'])) {
