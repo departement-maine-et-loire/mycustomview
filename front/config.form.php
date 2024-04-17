@@ -24,28 +24,26 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 include ('../../../inc/includes.php');
 
 Session::checkLoginUser();
 
 if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
-   Html::header("TITRE", $_SERVER['PHP_SELF'], "plugins", "pluginmycustomview", "");
+    Html::header("TITRE", $_SERVER['PHP_SELF'], "plugins", "pluginmycustomview", "");
 } else {
-   Html::helpHeader("TITRE", $_SERVER['PHP_SELF']);
+    Html::helpHeader("TITRE", $_SERVER['PHP_SELF']);
 }
 
-   $config = new PluginMycustomviewConfig();
+$config = new PluginMycustomviewConfig();
 
-   if($max_filters = $config->getMaxFilters()) {
-      $config->showForm($max_filters);
-   }
-   else 
-   {
-      $config->showForm();
-   }
-   Html::closeForm();
-   
+if ($max_filters = $config->getMaxFilters()) {
+    $config->showForm($max_filters);
+} else {
+    $config->showForm($max_filters = 6);
+}
+
+Html::closeForm();
 
 Html::footer();

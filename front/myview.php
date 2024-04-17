@@ -24,22 +24,22 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 include ('../../../inc/includes.php');
 
 Session::checkLoginUser();
 
 if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
-   Html::header("TITRE", $_SERVER['PHP_SELF'], "plugins", "pluginmycustomview", "");
+    Html::header("TITRE", $_SERVER['PHP_SELF'], "plugins", "pluginmycustomview", "");
 } else {
-   Html::helpHeader("TITRE", $_SERVER['PHP_SELF']);
+    Html::helpHeader("TITRE", $_SERVER['PHP_SELF']);
 }
 
 Search::show('Ticket');
 
 if (Session::getCurrentInterface() == "helpdesk") {
-   Html::helpFooter();
+    Html::helpFooter();
 } else {
-   Html::footer();
+    Html::footer();
 }

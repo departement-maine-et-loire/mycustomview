@@ -24,7 +24,7 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access directly to this file");
@@ -51,10 +51,11 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         $pluginmycustomviewsavedsearch = new PluginMycustomviewSavedSearch();
         $user_settings = $pluginmycustomviewsavedsearch->getUserSettings();
         
-        if(count($user_settings) != 0){
+        if (count($user_settings) != 0){
             $settings_hidden = $user_settings[0]['settings_hidden'];
             $list_limit = $user_settings[0]['list_limit'];
             $_SESSION['glpilist_limit_mcv'] = $list_limit;
+            
             if ($user_settings[0]['default_page'] == 1) {
                 $default_page = true;
             } else {
@@ -94,11 +95,13 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
 
         echo "<button id='mcv_show' title='" .__("Afficher les réglages", "mycustomview") . "' class='mcv_button mcv_text_light mcv_button_basic mcv_show '><i style='margin-left: 5px' class='fas fa-cog'></i></button>";
         echo "</div>";
+
         if ($settings_hidden) {
             echo "<div class='mcv_manage_tab mcv_display_none'>";
         } else {
             echo "<div class='mcv_manage_tab'>";
         }
+
         echo "<input type='hidden' id='user-id' value='" . $_SESSION['glpiID'] . "'>";
         echo "<div class='d-flex flex-column flex-start'>";
         echo "<div class='d-flex self-flex-start m-r-auto align-start m-b-5'>";
@@ -147,9 +150,10 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
             $liste = PluginMycustomviewSavedSearch::getUserSavedSearchMcv($max_filters);
             for ($i = 0; $i < $count; $i++) {
                 
-                if($i >= $max_filters){
+                if ($i >= $max_filters){
                     break;
                 }
+
                 if ($liste) {
                     $screen_mode = isset($liste[$i]['screen_mode']) ? $liste[$i]['screen_mode'] : null;
                     $height = isset($liste[$i]['height']) ? $liste[$i]['height'] : null;
@@ -200,7 +204,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
 
 
                         $list = PluginMycustomviewSavedSearch::getSavedSearchById($liste[$i]['savedsearch_id']);
-                            // Ajout des ID déjà présents dans une liste
+                        // Ajout des ID déjà présents dans une liste
                         array_push($idList, $liste[$i]['savedsearch_id']);
                         foreach ($list as $array) {
                             $indexBloc++;
@@ -221,6 +225,8 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
                             echo "</button>";
 
                             parse_str($array['query'], $p);
+
+                            $p['list_limit'] = $list_limit;
 
                             PluginMycustomviewSearch::showListMcv($array['itemtype'], $p);
                         }
@@ -260,8 +266,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
                 $showL = __('Afficher la liste', 'mycustomview');
 
                 // Bouton afficher / Masquer la liste pour corriger la traduction
-                echo
-                "
+                echo "
                 <script>
                     // Faire apparaitre/disparaitre le tableau des recherches sauvegardées
                     $('.listToggle').on('click', function () {
@@ -291,6 +296,7 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         $windowS = __("Fenêtre réduite", "mycustomview");
         $windowL = __("Fenêtre large", "mycustomview");
 
+        // Permets d'élargir ou non les vues
         echo "
         <script>
             $('.mcv_screenmode').on('click', function () {
@@ -315,64 +321,64 @@ class PluginMycustomviewBlocs extends PluginMycustomviewSearch
         // On recrée en dehors de la boucle l'affichage des préférences afin d'éviter de déclencher plusieurs fois le script
         echo "
         <script>
-        $(document).ready(function() {
-            mcv_display_prefmodals = document.querySelectorAll('.show_displaypreference_modal');
-            mcv_display_prefmodals.forEach(function(mcv_display_prefmodal) {
-        
-                mcv_display_prefmodal.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    mcv_itemtype = mcv_display_prefmodal.id
-                    const mcv_modal_fade = document.createElement('div');
-                    mcv_modal_fade.className = 'modal fade';
-                    mcv_modal_fade.id = 'displayprefence_modal';
-                    mcv_modal_fade.role = 'dialog';
-        
-                    const mcv_modal_dialog = document.createElement('div');
-                    mcv_modal_dialog.className = 'modal-dialog modal-lg';
-        
-                    const mcv_modal_content = document.createElement('div');
-                    mcv_modal_content.className = 'modal-content';
-        
-                    const mcv_modal_header = document.createElement('div');
-                    mcv_modal_header.className = 'modal-header';
-        
-                    const mcv_modal_title = document.createElement('h4');
-                    mcv_modal_title.className = 'modal-title';
-                    mcv_modal_title.innerHTML = '" .__("Select default items to show") . "'; // <-----------------------------------------
-        
-                    const mcv_btn_close = document.createElement('button');
-                    mcv_btn_close.setAttribute('aria-label', '" . __("Close modal") . "'); // <-----------------------------------------
-                    mcv_btn_close.type = 'button';
-                    mcv_btn_close.className = 'btn-close';
-                    mcv_btn_close.setAttribute('data-bs-dismiss', 'modal');
-        
-                    const mcv_modal_body = document.createElement('div');
-                    mcv_modal_body.className = 'modal-body';
-        
-                    const mcv_modal_ratio = document.createElement('div');
-                    mcv_modal_ratio.className = 'ratio ratio-4x3';
-        
-                    const mcv_iframe = document.createElement('iframe');
-                    mcv_iframe.setAttribute('src', 'displaypreference.form.php?itemtype=' + mcv_itemtype);
-        
-                    document.querySelector('body').appendChild(mcv_modal_fade)
-                    mcv_modal_fade.appendChild(mcv_modal_dialog)
-                    mcv_modal_dialog.appendChild(mcv_modal_content)
-                    mcv_modal_content.appendChild(mcv_modal_header)
-                    mcv_modal_header.appendChild(mcv_modal_title)
-                    mcv_modal_header.appendChild(mcv_btn_close)
-                    mcv_modal_content.appendChild(mcv_modal_body)
-                    mcv_modal_body.appendChild(mcv_modal_ratio)
-                    mcv_modal_ratio.appendChild(mcv_iframe)
-        
-                    $('#displayprefence_modal').modal('show');
+            $(document).ready(function() {
+                mcv_display_prefmodals = document.querySelectorAll('.show_displaypreference_modal');
+                mcv_display_prefmodals.forEach(function(mcv_display_prefmodal) {
+            
+                    mcv_display_prefmodal.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        mcv_itemtype = mcv_display_prefmodal.id
+                        const mcv_modal_fade = document.createElement('div');
+                        mcv_modal_fade.className = 'modal fade';
+                        mcv_modal_fade.id = 'displayprefence_modal';
+                        mcv_modal_fade.role = 'dialog';
+            
+                        const mcv_modal_dialog = document.createElement('div');
+                        mcv_modal_dialog.className = 'modal-dialog modal-lg';
+            
+                        const mcv_modal_content = document.createElement('div');
+                        mcv_modal_content.className = 'modal-content';
+            
+                        const mcv_modal_header = document.createElement('div');
+                        mcv_modal_header.className = 'modal-header';
+            
+                        const mcv_modal_title = document.createElement('h4');
+                        mcv_modal_title.className = 'modal-title';
+                        mcv_modal_title.innerHTML = '" .__("Select default items to show") . "'; // <-----------------------------------------
+            
+                        const mcv_btn_close = document.createElement('button');
+                        mcv_btn_close.setAttribute('aria-label', '" . __("Close modal") . "'); // <-----------------------------------------
+                        mcv_btn_close.type = 'button';
+                        mcv_btn_close.className = 'btn-close';
+                        mcv_btn_close.setAttribute('data-bs-dismiss', 'modal');
+            
+                        const mcv_modal_body = document.createElement('div');
+                        mcv_modal_body.className = 'modal-body';
+            
+                        const mcv_modal_ratio = document.createElement('div');
+                        mcv_modal_ratio.className = 'ratio ratio-4x3';
+            
+                        const mcv_iframe = document.createElement('iframe');
+                        mcv_iframe.setAttribute('src', 'displaypreference.form.php?itemtype=' + mcv_itemtype);
+            
+                        document.querySelector('body').appendChild(mcv_modal_fade)
+                        mcv_modal_fade.appendChild(mcv_modal_dialog)
+                        mcv_modal_dialog.appendChild(mcv_modal_content)
+                        mcv_modal_content.appendChild(mcv_modal_header)
+                        mcv_modal_header.appendChild(mcv_modal_title)
+                        mcv_modal_header.appendChild(mcv_btn_close)
+                        mcv_modal_content.appendChild(mcv_modal_body)
+                        mcv_modal_body.appendChild(mcv_modal_ratio)
+                        mcv_modal_ratio.appendChild(mcv_iframe)
+            
+                        $('#displayprefence_modal').modal('show');
+                    });
+                })
+            
+                $('body').on('hide.bs.modal', '#displayprefence_modal', function() {
+                    location.reload();
                 });
             })
-        
-            $('body').on('hide.bs.modal', '#displayprefence_modal', function() {
-                location.reload();
-            });
-        })
         </script>
         ";
     }

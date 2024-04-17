@@ -24,9 +24,9 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
-define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.3');
+define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.4');
 
 /**
  * Init hooks of the plugin.
@@ -50,9 +50,6 @@ function plugin_init_mycustomview()
    // -- JAVASCRIPT --
    $PLUGIN_HOOKS["javascript"]['mycustomview'] = [
       "/plugins/mycustomview/js/mycustomview.js",
-   ];
-   $PLUGIN_HOOKS["javascript"]['mycustomview'] = [
-      "/plugins/mycustomview/js/jquery.dad.js",
    ];
 }
 

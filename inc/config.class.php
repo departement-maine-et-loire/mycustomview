@@ -24,7 +24,7 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 if (!defined('GLPI_ROOT')) {
  die("Sorry. You can't access directly to this file");
@@ -32,8 +32,6 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginMycustomviewConfig extends CommonDBTM
 {
-
-
     /**
      * Get configuration infos from database
      * Return max_filters if exists, else return "false"
@@ -43,11 +41,11 @@ class PluginMycustomviewConfig extends CommonDBTM
     public static function getConfiguration()
     {
         global $DB;
+
         $result = $DB->request([
             'FROM' => 'glpi_plugin_mycustomview_config',
             'LIMIT' => 1
-        ]
-        );
+        ]);
 
         if ($result)
         {
@@ -69,10 +67,9 @@ class PluginMycustomviewConfig extends CommonDBTM
         $max_filters = $data[0];
 
         return $max_filters;
-        
     }
 
-     /**
+    /**
      * Set configuration infos in database
      * @global type $DB
      * @param $id
@@ -82,7 +79,7 @@ class PluginMycustomviewConfig extends CommonDBTM
     {
         global $DB;
 
-        if($id != null){
+        if ($id != null){
             if(isset($max_filters)){
             $DB->update(
                 'glpi_plugin_mycustomview_config', [
@@ -92,7 +89,8 @@ class PluginMycustomviewConfig extends CommonDBTM
                     ]
                 );
             }
-        } 
+        }
+
         else {
             $DB->insert(
                 'glpi_plugin_mycustomview_config', [
@@ -102,11 +100,10 @@ class PluginMycustomviewConfig extends CommonDBTM
         }
     }
 
-    public function showForm($id, $options= [] ){
-
+    public function showForm($id, $options= [] ) 
+    {
         global $CFG_GLPI;
-        $modify = false;
-        $create = false;
+
         $max_filters = "";
         $configData = self::getConfiguration();
         $id_max_filters = $configData[1];
@@ -116,50 +113,50 @@ class PluginMycustomviewConfig extends CommonDBTM
            return false;
         }
 
-        if(isset($_POST['max_filters'])) {
-            $change_max_filters = self::setConfiguration($_POST['max_filters'], $id_max_filters);
+        if (isset($_POST['max_filters'])) {
+            self::setConfiguration($_POST['max_filters'], $id_max_filters);
             $configData = self::getConfiguration();
             $id_max_filters = $configData[1];
             $max_filters = $configData[0]; 
-
         }
 
         // si max_filters est défini, on est en train de modif
-        if($max_filters != "") {
-            $modify = true;
+        if ($max_filters != "") {
             $createUpdate = __("Enregistrer", "mycustomview");
         }
+
         else {
-            $create = true;
             $createUpdate = __("Ajouter", "mycustomview");
         }
         
         if (!Session::haveRight("profile",READ)) {
             return false;
-         }
-   
-         $canedit = Session::haveRight("profile", CREATE);
-         $prof = new Profile();
-         if ($id){
+        }
+
+        $prof = new Profile();
+
+        if ($id) {
             $prof->getFromDB($id);
-         }
+        }
         
         echo "<div align='center'>"; 
         echo "<form action='./config.form.php' method='post'>\n";
         echo "<table class='tab_cadre_fixe' style='margin: 0; margin-top: 5px;'>\n";
-        echo " <tr><th colspan='2'>$createUpdate " .__("le nombre de filtres maximum pour la page \"Ma vue personnalisée\"", "mycustomview") . ".</th></tr>\n";
-        echo "<td style='width: 30%'><label for ='max_filters'>" .__("Nombres de filtres", "mycustomview") . " : </label></td>";
+        echo "<tr><th colspan='2'>$createUpdate " . __("le nombre de filtres maximum pour la page \"Ma vue personnalisée\"", "mycustomview") . ".</th></tr>\n";
+        echo "<td style='width: 30%'><label for ='max_filters'>" . __("Nombres de filtres", "mycustomview") . " : </label></td>";
         echo "<td style='width: 70%'><input type ='number' min='1' max='30' id='max_filters' value= '$max_filters' name='max_filters' placeholder='Min : 1 / Max : 30' required</td>";
         echo "</table>\n";
-        if(Session::haveRight("profile", CREATE)){
-            echo "<input type='submit' style='margin-top : 10px' name='$createUpdate' class='submit' ".
-        "value='$createUpdate'>";
+        
+        if (Session::haveRight("profile", CREATE)) {
+            echo "<input type='submit' style='margin-top : 10px' name='$createUpdate' class='submit' " . "value='$createUpdate'>";
         }
+
         else {
             echo "<div class='warning' style='margin-top:10px; width:70%'><i class='fa fa-exclamation-triangle fa'></i>";
             echo __("Vous n'avez pas les droits pour modifier les données de cette page.", "mycustomview");
             echo "</div>";
         }
+
         Html::closeForm();
         echo "</div>"; 
     }

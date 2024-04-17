@@ -24,7 +24,7 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 include("../../../inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
@@ -39,8 +39,9 @@ if (PluginMycustomviewProfile::checkProfileRight($_SESSION['glpiactiveprofile'][
 
 if (isset($_POST)) {
     if (isset($_POST['deleteTab'])) {
-            PluginMycustomviewSavedSearch::deleteSavedSearch($_POST['deleteTab']);
+        PluginMycustomviewSavedSearch::deleteSavedSearch($_POST['deleteTab']);
     }
+    
     if (isset($_POST['orderTab'])) {
         PluginMycustomviewSavedSearch::moveSavedSearch($_POST['orderTab']);
         PluginMycustomviewSavedSearch::reorderSavedSearch();

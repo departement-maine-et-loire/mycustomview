@@ -24,7 +24,7 @@
  You should have received a copy of the GNU General Public License
  along with MyCustomView. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
+*/
 
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access directly to this file");
@@ -34,18 +34,21 @@ class PluginMycustomviewProfile extends Profile
 {
     static $rightname = "profile";
 
-    static function getAllRights() {
+    static function getAllRights()
+    {
         $rights = [
             ['itemtype'  => 'PluginMyCustomViewUse',
                   'label'     => __('Modification (création et suppression)', 'mycustomview'),
                   'field'     => 'plugin_mycustomview_use',
                   'rights'    => [ALLSTANDARDRIGHT => __('Read')]]];
-          return $rights;
+
+        return $rights;
     }
 
-    function cleanProfiles($ID) {
-
+    function cleanProfiles($ID)
+    {
         global $DB;
+
         $query = "DELETE FROM `glpi_profiles`
                   WHERE `profiles_id`='$ID'
                   AND `name` LIKE '%plugin_mycustomview%'";
@@ -65,6 +68,7 @@ class PluginMycustomviewProfile extends Profile
         if ($item->getType() == 'Profile') {
             return __("Ma vue personnalisée", "mycustomview");
         }
+
         return '';
     }
 
@@ -92,9 +96,10 @@ class PluginMycustomviewProfile extends Profile
     /**
      * @param $profile
      */
-    static function addDefaultProfileInfos($profiles_id, $rights) {
-
+    static function addDefaultProfileInfos($profiles_id, $rights)
+    {
         $profileRight = new ProfileRight();
+
         foreach ($rights as $right => $value) {
             if (!countElementsInTable(
                 'glpi_profilerights',
@@ -114,7 +119,8 @@ class PluginMycustomviewProfile extends Profile
     /**
      * @param $ID  integer
      */
-    static function createFirstAccess($profiles_id) {
+    static function createFirstAccess($profiles_id)
+    {
 
         include_once Plugin::getPhpDir('mycustomview')."/inc/profile.class.php";
         foreach (self::getAllRights() as $right) {
@@ -122,7 +128,8 @@ class PluginMycustomviewProfile extends Profile
         }
     }
 
-    public static function checkProfileRight($showProfileId) {
+    public static function checkProfileRight($showProfileId)
+    {
         global $DB;
         
         $result = $DB->request([
@@ -133,7 +140,7 @@ class PluginMycustomviewProfile extends Profile
             'LIMIT' => 1
         ]);
 
-        foreach($result as $data){
+        foreach($result as $data) {
             return $data['rights'];
         }
     }
