@@ -102,8 +102,7 @@ class PluginMycustomviewSavedSearch extends SavedSearch
         $id_user = Session::getLoginUserID();
 
         $query = "SELECT *
-        FROM glpi_savedsearches
-        WHERE users_id = $id_user";
+        FROM glpi_savedsearches";
 
         $result = $DB->query($query);
 

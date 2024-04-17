@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
 */
 
-define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.3');
+define('PLUGIN_MYCUSTOMVIEW_VERSION', '2.0.4');
 
 /**
  * Init hooks of the plugin.
